@@ -174,4 +174,26 @@ public class Model {
         }
     }
 
+    public String login(String username, String password) {
+        String sql = "SELECT * FROM Users WHERE UserName = ? AND Password = ?";
+
+        try (Connection conn = this.make_connection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)){
+
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
+            m_results = pstmt.executeQuery();
+            String toReturn = "Error find";
+
+            if (m_results.next()){
+                toReturn = "OK";
+            }
+
+            return toReturn;
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+    }
 }

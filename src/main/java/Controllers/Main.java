@@ -1,16 +1,19 @@
+package Controllers;
+
 import Controllers.Controller;
 import Models.Model;
 import Views.AView;
-import Views.MainView;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.InputStream;
-
 public class Main extends Application {
+
+    public static Stage pStage;
+
+
     /**
      * The main entry point for all JavaFX applications.
      * The start method is called after the init method has returned,
@@ -29,9 +32,11 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
+        pStage = primaryStage;
+
         // receiving fxml loader and setting primary node
         FXMLLoader loader = new FXMLLoader();
-        String fxmlFile = "/fxmls/MainView.fxml";
+        String fxmlFile = "/fxmls/UnRegistered.fxml";
         Parent root = loader.load(getClass().getResourceAsStream(fxmlFile));
 
         // setting up

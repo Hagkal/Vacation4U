@@ -1,13 +1,20 @@
 package Views;
 
 import Controllers.Controller;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 
 public abstract class AView {
 
      protected Controller _controller;
+     protected Scene _cameFrom;
 
-    public void set_controller(Controller c){
+
+     public void set_cameFrom(Scene old){
+         _cameFrom = old;
+     }
+
+     public void set_controller(Controller c){
         this._controller = c;
     }
 

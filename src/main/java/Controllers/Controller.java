@@ -54,4 +54,8 @@ public class Controller {
 
         return date.toString();
     }
+
+    public String login(String username, String password) {
+        return _model.login(username, password);
+    }
 }

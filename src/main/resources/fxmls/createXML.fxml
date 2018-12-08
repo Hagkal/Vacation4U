@@ -12,8 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.CreateView">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.CreateView">
 
     <children>
         <BorderPane prefHeight="400.0" prefWidth="600.0">
@@ -36,7 +35,7 @@
                         <Separator prefHeight="13.0" prefWidth="179.0" />
                         <PasswordField fx:id="pf_password" prefHeight="27.0" prefWidth="179.0" />
                         <Separator layoutX="10.0" layoutY="38.0" prefHeight="13.0" prefWidth="179.0" />
-                        <DatePicker fx:id="dp_date" prefHeight="25.0" prefWidth="203.0" />
+                        <DatePicker fx:id="dp_date" prefHeight="25.0" prefWidth="203.0"  />
                         <Separator layoutX="10.0" layoutY="78.0" prefHeight="13.0" prefWidth="179.0" />
                         <TextField fx:id="tf_firstName" layoutX="10.0" layoutY="10.0" prefHeight="28.0" prefWidth="179.0" />
                         <Separator layoutX="10.0" layoutY="119.0" prefHeight="13.0" prefWidth="179.0" />
@@ -59,18 +58,14 @@
             <left>
                 <Pane prefHeight="370.0" prefWidth="236.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="lbl_userNameErr" layoutX="120.0" layoutY="5.0" prefHeight="17.0" prefWidth="112.0"
-                         text="אנא הזן שם משתמש" textFill="RED" visible="false" />
-                  <Label fx:id="lbl_passwordErr" layoutX="53.0" layoutY="45.0" prefHeight="17.0" prefWidth="179.0"
-                         text="יש להזין סיסמא בת 8 תווים לפחות" textFill="RED" visible="false" />
-                  <Label fx:id="lbl_dateErr" layoutX="56.0" layoutY="87.0" prefHeight="17.0" prefWidth="176.0"
-                         text="שימוש במערכת מעל גיל 18 בלבד!" textFill="RED" visible="false" />
-                  <Label fx:id="lbl_firstNameErr" layoutX="134.0" layoutY="126.0" prefHeight="17.0" prefWidth="98.0"
-                         text="אנא הזן שם פרטי" textFill="RED" visible="false" />
-                  <Label fx:id="lbl_lastNameErr" layoutX="120.0" layoutY="164.0" prefHeight="17.0" prefWidth="112.0"
-                         text="אנא הזן שם משפחה" textFill="RED" visible="false" />
-                  <Label fx:id="lbl_hometownErr" layoutX="129.0" layoutY="206.0" prefHeight="17.0" prefWidth="101.0"
-                         text="אנא הזן עיר מגורים" textFill="RED" visible="false" />
+                  <Label fx:id="lbl_userNameErr" layoutX="120.0" layoutY="5.0" prefHeight="17.0" prefWidth="112.0" text="אנא הזן שם משתמש" textFill="RED" visible="false" />
+                  <Label fx:id="lbl_passwordErr" layoutX="53.0" layoutY="45.0" prefHeight="17.0" prefWidth="179.0" text="יש להזין סיסמא בת 8 תווים לפחות" textFill="RED" visible="false" />
+                  <Label fx:id="lbl_dateErr" layoutX="56.0" layoutY="87.0" prefHeight="17.0" prefWidth="176.0" text="שימוש במערכת מעל גיל 18 בלבד!" textFill="RED" visible="false" />
+                  <Label fx:id="lbl_firstNameErr" layoutX="134.0" layoutY="126.0" prefHeight="17.0" prefWidth="98.0" text="אנא הזן שם פרטי" textFill="RED" visible="false" />
+                  <Label fx:id="lbl_lastNameErr" layoutX="120.0" layoutY="164.0" prefHeight="17.0" prefWidth="112.0" text="אנא הזן שם משפחה" textFill="RED" visible="false" />
+                  <Label fx:id="lbl_hometownErr" layoutX="129.0" layoutY="206.0" prefHeight="17.0" prefWidth="101.0" text="אנא הזן עיר מגורים" textFill="RED" visible="false" />
+                  <Button fx:id="btn_back" alignment="BOTTOM_LEFT" mnemonicParsing="false"
+                          onMouseClicked="#goBack" prefHeight="25.0" prefWidth="77.0" text="חזור" />
                </children></Pane>
             </left>
             <bottom>
@@ -88,8 +83,7 @@
                         <Pane prefHeight="62.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
                     </bottom>
                     <top>
-                        <Button fx:id="btn_send" mnemonicParsing="false" onMouseClicked="#send_create"
-                                prefHeight="25.0" prefWidth="77.0" text="שלח טופס" BorderPane.alignment="CENTER" />
+                        <Button fx:id="btn_send" mnemonicParsing="false" onMouseClicked="#send_create" prefHeight="25.0" prefWidth="77.0" text="שלח טופס" BorderPane.alignment="CENTER" />
                     </top>
                 </BorderPane>
             </bottom>

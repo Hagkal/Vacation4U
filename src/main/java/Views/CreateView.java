@@ -1,5 +1,7 @@
 package Views;
 
+import Controllers.Main;
+import Views.AView;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -26,6 +28,7 @@ public class CreateView extends AView {
     public Label lbl_hometownErr;
 
     public Button btn_send;
+    public Button btn_back;
 
 
     /**
@@ -126,5 +129,12 @@ public class CreateView extends AView {
         }
 
         return true;
+    }
+
+    public void goBack(MouseEvent mouseEvent) {
+        Main.pStage.setScene(_cameFrom);
+        Main.pStage.show();
+
+        mouseEvent.consume();
     }
 }
