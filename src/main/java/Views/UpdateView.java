@@ -76,7 +76,7 @@ public class UpdateView extends AView {
         }
 
         else{
-            ArrayList<String> response = _controller.read_update_user(s);
+            ArrayList<String> response = _controller.read_user(s);
 
             if (response != null) {
 
@@ -95,7 +95,8 @@ public class UpdateView extends AView {
                 tf_lastName.setDisable(false);
                 tf_hometown.setDisable(false);
                 pf_passwordUpdate.setText(response.get(1));
-                dp_dateUpdate.setPromptText(response.get(2));
+                dp_dateUpdate.setValue(getTime(response.get(2)));
+                dp_dateUpdate.getEditor().setText(response.get(2));
                 tf_firstName.setText(response.get(3));
                 tf_lastName.setText(response.get(4));
                 tf_hometown.setText(response.get(5));
@@ -112,6 +113,33 @@ public class UpdateView extends AView {
     }
 
 
+    /**
+     * method to transfer Birthday string into LocalDate
+     * @param s - the String representation of Birthday
+     * @return - LocalDate representation of a birthday, or NOW if something went wrong
+     */
+    private LocalDate getTime(String s) {
+        String[] splitted = s.split("/");
+        int day = 0;
+        int month = 0;
+        int year = 0;
+        try {
+            year = Integer.valueOf(splitted[2]);
+            month = Integer.valueOf(splitted[0]);
+            day = Integer.valueOf(splitted[1]);
+        }
+        catch (Exception e){
+            popProblem("Something bad happened while retrieving Birthday :( Info: " + e.getMessage());
+            return LocalDate.now();
+        }
+
+        return LocalDate.of(year, month, day);
+    }
+
+    /**
+     * method to send an update to s specified user
+     * @param mouseEvent - mouse click on updare event
+     */
     public void send_update(MouseEvent mouseEvent) {
         ArrayList<String> toSend = new ArrayList<String>();
         boolean allChecked = true;
@@ -121,7 +149,7 @@ public class UpdateView extends AView {
                 firstname = tf_firstName.getText(),
                 lastname = tf_lastName.getText(),
                 hometown = tf_hometown.getText(),
-                birthday = "";
+                birthday = dp_dateUpdate.getValue().toString();
 
         //set error labels to be not visible
         lbl_userNameUpdateErr.setVisible(false);
@@ -130,11 +158,6 @@ public class UpdateView extends AView {
         lbl_passwordUpdateErr.setVisible(false);
         lbl_hometownUpdateErr.setVisible(false);
         lbl_dateUpdateErr.setVisible(false);
-
-        if (!dp_dateUpdate.getEditor().getText().isEmpty())
-            birthday = dp_dateUpdate.getEditor().getText();
-        else if (!dp_dateUpdate.getPromptText().isEmpty())
-            birthday = dp_dateUpdate.getPromptText();
 
         //username check
         if (username.isEmpty()){
@@ -179,9 +202,40 @@ public class UpdateView extends AView {
             toSend.add(firstname);
             toSend.add(lastname);
             toSend.add(hometown);
-            _controller.update_user(username, toSend);
+
+            String response = _controller.update_user(username, toSend);
+            if (response.contains("failed")){
+                popProblem(response);
+            }
+            else {
+                popInfo(response);
+            }
+
+            update_cancel(new ActionEvent());
         }
-        dp_dateUpdate.setPromptText("");
-        dp_dateUpdate.getEditor().setText("");
+
+        mouseEvent.consume();
+    }
+
+
+    /**
+     * this method checks if a user age is above 18
+     * @param age - datepicker object
+     * @return true if date is larger then 18, false otherwise
+     */
+    private boolean isBiggerThen18 (DatePicker age) {
+        LocalDate Date = age.getValue();
+        LocalDate today = LocalDate.now();
+        if (Date == null || Date.getYear() + 18 > today.getYear())
+            return false;
+        else if (Date.getYear() + 18 == today.getYear()) {
+            if (Date.getMonthValue() > today.getMonthValue())
+                return false;
+            else if (Date.getMonthValue() == today.getMonthValue()) {
+                return Date.getDayOfMonth() <= today.getDayOfMonth();
+            }
+        }
+
+        return true;
     }
 }

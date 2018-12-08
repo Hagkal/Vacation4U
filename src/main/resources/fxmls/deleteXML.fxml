@@ -9,7 +9,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.MainView">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.DeleteView">
 
     <children>
         <BorderPane prefHeight="400.0" prefWidth="600.0">
@@ -23,12 +24,12 @@
             <center>
                 <VBox prefHeight="323.0" prefWidth="189.0" BorderPane.alignment="CENTER">
                     <children>
-                        <Label alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="500.0" text="שם משתמש:">
+                        <Label fx:id="lbl_userName" alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="500.0" text="שם משתמש:">
                             <font>
                                 <Font size="17.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="tf_usernamedelete" alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="415.0" />
+                        <TextField fx:id="tf_userNameDelete" alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="415.0" />
                     </children>
                 </VBox>
             </center>
@@ -42,7 +43,7 @@
                 <Pane prefHeight="283.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                     <children>
                   <Label fx:id="lbl_userNameDeleteErr" visible="false" layoutX="309.0" layoutY="16.0" text="אנא הזן שם משתמש!" />
-                        <Button onMouseClicked="#send_delete" alignment="CENTER_RIGHT" layoutX="431.0" layoutY="7.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="45.0" text="מחק" textAlignment="CENTER" />
+                        <Button fx:id="btn_delete" onMouseClicked="#send_delete" alignment="CENTER_RIGHT" layoutX="431.0" layoutY="7.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="45.0" text="מחק" textAlignment="CENTER" />
                     </children>
                 </Pane>
             </bottom></BorderPane>

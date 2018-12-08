@@ -54,6 +54,8 @@
                             <Separator layoutX="10.0" layoutY="127.0" prefHeight="20.0" prefWidth="106.0" />
                             <Button fx:id="btn_exit" layoutX="10.0" layoutY="147.0" mnemonicParsing="false"
                                     onMouseClicked="#setExit" text="יציאה" />
+                            <Button fx:id="btn_create" layoutX="10.0" layoutY="180.0" mnemonicParsing="false"
+                                    onMouseClicked="#setCreate" text="יצירת משתמש" />
                         </children>
                     </VBox>
                 </center>

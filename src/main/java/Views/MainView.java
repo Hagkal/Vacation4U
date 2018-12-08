@@ -14,12 +14,29 @@ public class MainView extends AView{
 
     @FXML
     public Button btn_exit;
-    public Button btn_create;
     public Button btn_read;
     public Button btn_update;
     public Button btn_delete;
 
     public BorderPane lyt_mainPane;
+
+    /**
+     * method to set create screen
+     * @param mouseEvent - mouse click on create button
+     */
+    public void setCreate(MouseEvent mouseEvent){
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            lyt_mainPane.setCenter(loader.load(getClass().getResourceAsStream("/fxmls/createXML.fxml")));
+
+            AView v = loader.getController();
+            v.set_controller(_controller);
+
+        } catch (IOException e) {
+            popProblem("Error while trying to load create interface\n" + e.getMessage());
+        }
+        mouseEvent.consume();
+    }
 
 
     /**
@@ -29,7 +46,7 @@ public class MainView extends AView{
     public void setRead(MouseEvent mouseEvent) {
         FXMLLoader loader = new FXMLLoader();
         try {
-            lyt_mainPane.setCenter(loader.load(getClass().getResourceAsStream("/fxml/readXML.fxml")));
+            lyt_mainPane.setCenter(loader.load(getClass().getResourceAsStream("/fxmls/readXML.fxml")));
 
         AView v = loader.getController();
         v.set_controller(_controller);
@@ -48,7 +65,7 @@ public class MainView extends AView{
     public void setUpdate(MouseEvent mouseEvent) {
         FXMLLoader loader = new FXMLLoader();
         try {
-            lyt_mainPane.setCenter(loader.load(getClass().getResourceAsStream("/fxml/updateXML.fxml")));
+            lyt_mainPane.setCenter(loader.load(getClass().getResourceAsStream("/fxmls/updateXML.fxml")));
 
             AView v = loader.getController();
             v.set_controller(_controller);
@@ -67,7 +84,7 @@ public class MainView extends AView{
     public void setDelete(MouseEvent mouseEvent) {
         FXMLLoader loader = new FXMLLoader();
         try {
-            lyt_mainPane.setCenter(loader.load(getClass().getResourceAsStream("/fxml/deleteXML.fxml")));
+            lyt_mainPane.setCenter(loader.load(getClass().getResourceAsStream("/fxmls/deleteXML.fxml")));
 
             AView v = loader.getController();
             v.set_controller(_controller);
