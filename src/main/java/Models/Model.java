@@ -1,7 +1,6 @@
 package Models;
 
-import Controllers.LoginController;
-import Controllers.MainController;
+
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,14 +10,14 @@ public class Model {
     private final String DB_URL = "jdbc:sqlite:src/main/resources/DB/DataBase.db";
 
     // helpful attributes
-    private MainController c;
-    private LoginController lc;
+//    private MainController c;
+//    private LoginController lc;
     private ResultSet m_results;
 
     // setters
-    public void set_controller(MainController c){
-        this.c = c;
-    }
+//    public void set_controller(MainController c){
+ //       this.c = c;
+ //   }
 
 
 
@@ -67,7 +66,7 @@ public class Model {
     public void create_user(ArrayList<String> attributes){
 
         if (user_exist(attributes.get(0))){
-            c.create_response("Username: " + attributes.get(0) + "\nalready exist!");
+ //           c.create_response("Username: " + attributes.get(0) + "\nalready exist!");
             return;
         }
 
@@ -84,10 +83,10 @@ public class Model {
             pstmt.setString(6, attributes.get(5)); // hometown
 
             pstmt.executeUpdate();
-            c.create_response("Created :)");
+ //           c.create_response("Created :)");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            c.create_response("Failed :/");
+//            c.create_response("Failed :/");
         }
     }
 
@@ -112,10 +111,10 @@ public class Model {
             toReturn.add(m_results.getString(5));
             toReturn.add(m_results.getString(6));
 
-            c.read_response(toReturn);
+//            c.read_response(toReturn);
         }catch (SQLException e){
             System.out.println(e.getMessage());
-            c.read_response(null);
+ //           c.read_response(null);
         }
     }
 
@@ -127,7 +126,7 @@ public class Model {
     public void update_user(String toChange, ArrayList<String> newatt){
         // checking if the new username already exist
         if (!user_exist(toChange)){
-            c.update_response("User: " + toChange +"\ndoes not exist!");
+//            c.update_response("User: " + toChange +"\ndoes not exist!");
             return;
         }
         /**else{
@@ -160,10 +159,10 @@ public class Model {
 
             // update
             pstmt.executeUpdate();
-            c.update_response("Update success");
+ //           c.update_response("Update success");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            c.update_response("Update failed");
+//            c.update_response("Update failed");
         }
     }
 
@@ -173,7 +172,7 @@ public class Model {
      */
     public void delete_user(String toDelete){
         if (!user_exist(toDelete)){
-            c.delete_response("Username: " + toDelete + "\ndoes not exist");
+ //           c.delete_response("Username: " + toDelete + "\ndoes not exist");
             return;
         }
 
@@ -187,10 +186,10 @@ public class Model {
 
             // execute the delete statement
             pstmt.executeUpdate();
-            c.delete_response("Delete success");
+   //         c.delete_response("Delete success");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            c.delete_response("Delete failed");
+  //          c.delete_response("Delete failed");
         }
     }
 
@@ -211,10 +210,10 @@ public class Model {
             toReturn.add(m_results.getString(5));
             toReturn.add(m_results.getString(6));
 
-            c.read_update_response(toReturn);
+ //           c.read_update_response(toReturn);
         }catch (SQLException e){
             System.out.println(e.getMessage());
-            c.read_update_response(null);
+ //           c.read_update_response(null);
         }
     }
 }
