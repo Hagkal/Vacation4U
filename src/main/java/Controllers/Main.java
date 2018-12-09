@@ -44,7 +44,7 @@ public class Main extends Application {
         Model model = new Model();
         Controller controller = new Controller();
         AView view = loader.getController();
-        controller.set_model(model);
+      //  controller.set_model(model);
         view.set_controller(controller);
 
         // displaying the first presentation

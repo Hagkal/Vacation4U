@@ -339,10 +339,3 @@ public class Model {
             return null;
         }
     }
-
-
-    public static void main(String[] args){
-        Model m = new Model();
-        ArrayList<Vacation> vac = m.getAllVacations();
-    }
-}

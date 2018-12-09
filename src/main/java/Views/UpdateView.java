@@ -77,71 +77,43 @@ public class UpdateView extends ARegisteredView {
             popProblem("Please insert a valid Username");
         }
 
-        else{
-            ArrayList<String> response = _controller.read_user(s);
+//       else{
+//           ArrayList<String> response = _controller.read_update_user(s);
 
-            if (response != null) {
+//           if (response != null) {
 
-                btn_sendUpdate.setDisable(false);
+//               btn_sendUpdate.setDisable(false);
 
-                btn_cancel_update.setDisable(false);
-                btn_cancel_update.setVisible(true);
+//               btn_cancel_update.setDisable(false);
+//               btn_cancel_update.setVisible(true);
 
-                btn_update_search.setDisable(true);
-                tf_userNameRead.setDisable(true);
+//               btn_update_search.setDisable(true);
+//               tf_userNameRead.setDisable(true);
 
-                pf_passwordUpdate.setDisable(false);
-                dp_dateUpdate.setDisable(false);
-                dp_dateUpdate.setEditable(false);
-                tf_firstName.setDisable(false);
-                tf_lastName.setDisable(false);
-                tf_hometown.setDisable(false);
-                pf_passwordUpdate.setText(response.get(1));
-                dp_dateUpdate.setValue(getTime(response.get(2)));
-                dp_dateUpdate.getEditor().setText(response.get(2));
-                tf_firstName.setText(response.get(3));
-                tf_lastName.setText(response.get(4));
-                tf_hometown.setText(response.get(5));
+//               pf_passwordUpdate.setDisable(false);
+//               dp_dateUpdate.setDisable(false);
+//               dp_dateUpdate.setEditable(false);
+//               tf_firstName.setDisable(false);
+//               tf_lastName.setDisable(false);
+//               tf_hometown.setDisable(false);
+//               pf_passwordUpdate.setText(response.get(1));
+//               dp_dateUpdate.setPromptText(response.get(2));
+//               tf_firstName.setText(response.get(3));
+//               tf_lastName.setText(response.get(4));
+//               tf_hometown.setText(response.get(5));
 
                 prepareView(_loggedUser, _manager);
 
-            }
-            else{
-                popProblem("Username does not exist!");
-            }
-        }
+//           }
+//           else{
+//               popProblem("Username does not exist!");
+//           }
+//       }
 
-        mouseEvent.consume();
+//       mouseEvent.consume();
     }
 
 
-    /**
-     * method to transfer Birthday string into LocalDate
-     * @param s - the String representation of Birthday
-     * @return - LocalDate representation of a birthday, or NOW if something went wrong
-     */
-    private LocalDate getTime(String s) {
-        String[] splitted = s.split("/");
-        int day = 0;
-        int month = 0;
-        int year = 0;
-        try {
-            year = Integer.valueOf(splitted[2]);
-            month = Integer.valueOf(splitted[0]);
-            day = Integer.valueOf(splitted[1]);
-        }
-        catch (Exception e){
-            popProblem("Something bad happened while retrieving Birthday :( Info: " + e.getMessage());
-            return LocalDate.now();
-        }
-
-        return LocalDate.of(year, month, day);
-    }
-
-    /**
-     * method to send an update to s specified user
-     * @param mouseEvent - mouse click on updare event
-     */
     public void send_update(MouseEvent mouseEvent) {
         ArrayList<String> toSend = new ArrayList<String>();
         boolean allChecked = true;
@@ -151,7 +123,7 @@ public class UpdateView extends ARegisteredView {
                 firstname = tf_firstName.getText(),
                 lastname = tf_lastName.getText(),
                 hometown = tf_hometown.getText(),
-                birthday = dp_dateUpdate.getValue().toString();
+                birthday = "";
 
         //set error labels to be not visible
         lbl_userNameUpdateErr.setVisible(false);
@@ -160,6 +132,11 @@ public class UpdateView extends ARegisteredView {
         lbl_passwordUpdateErr.setVisible(false);
         lbl_hometownUpdateErr.setVisible(false);
         lbl_dateUpdateErr.setVisible(false);
+
+        if (!dp_dateUpdate.getEditor().getText().isEmpty())
+            birthday = dp_dateUpdate.getEditor().getText();
+        else if (!dp_dateUpdate.getPromptText().isEmpty())
+            birthday = dp_dateUpdate.getPromptText();
 
         //username check
         if (username.isEmpty()){
@@ -186,59 +163,28 @@ public class UpdateView extends ARegisteredView {
         }
 
         //date check
-        if (dp_dateUpdate.getValue() != null && !isBiggerThen18(dp_dateUpdate)){
-            lbl_dateUpdateErr.setVisible(true);
-            allChecked = false;
-        }
-
-        //hometown check
-        if (hometown.length() < 2){
-            lbl_hometownUpdateErr.setVisible(true);
-            allChecked = false;
-        }
-
-        if (allChecked){
-            toSend.add(username);
-            toSend.add(password);
-            toSend.add(birthday);
-            toSend.add(firstname);
-            toSend.add(lastname);
-            toSend.add(hometown);
-
-            String response = _controller.update_user(username, toSend);
-            if (response.contains("failed")){
-                popProblem(response);
-            }
-            else {
-                popInfo(response);
-            }
-
-            update_cancel(new ActionEvent());
-        }
-
-        mouseEvent.consume();
-    }
-
-
-    /**
-     * this method checks if a user age is above 18
-     * @param age - datepicker object
-     * @return true if date is larger then 18, false otherwise
-     */
-    private boolean isBiggerThen18 (DatePicker age) {
-        LocalDate Date = age.getValue();
-        LocalDate today = LocalDate.now();
-        if (Date == null || Date.getYear() + 18 > today.getYear())
-            return false;
-        else if (Date.getYear() + 18 == today.getYear()) {
-            if (Date.getMonthValue() > today.getMonthValue())
-                return false;
-            else if (Date.getMonthValue() == today.getMonthValue()) {
-                return Date.getDayOfMonth() <= today.getDayOfMonth();
-            }
-        }
-
-        return true;
+ //       if (dp_dateUpdate.getValue() != null && !isBiggerThen18(dp_dateUpdate)){
+ //           lbl_dateUpdateErr.setVisible(true);
+ //           allChecked = false;
+ //       }
+//
+ //       //hometown check
+ //       if (hometown.length() < 2){
+ //           lbl_hometownUpdateErr.setVisible(true);
+ //           allChecked = false;
+ //       }
+//
+ //       if (allChecked){
+ //           toSend.add(username);
+ //           toSend.add(password);
+ //           toSend.add(birthday);
+ //           toSend.add(firstname);
+ //           toSend.add(lastname);
+ //           toSend.add(hometown);
+ //           _controller.update_user(username, toSend);
+ //       }
+ //       dp_dateUpdate.setPromptText("");
+ //       dp_dateUpdate.getEditor().setText("");
     }
 
     @Override

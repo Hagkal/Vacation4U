@@ -1,54 +1,87 @@
 package Views;
 
-import Controllers.Main;
-import javafx.fxml.FXML;
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 
-public class unRegisterView extends AView {
+public class unRegisterView extends Application {
 
-    @FXML
-    public Button btn_exit;
-    public Button btn_login;
+    public Button btn_ams;
+    public Label lbl_ams_details;
 
-    /**
-     * method to exit the program
-     * @param mouseEvent - mouse click on exit event
-     */
-    public void exit(MouseEvent mouseEvent) {
-        Stage stage = (Stage) btn_exit.getScene().getWindow();
-        mouseEvent.consume();
-        stage.close();
+    public static void main(String[] args) {
+        launch(args);
     }
 
-
-    /**
-     * method to move to login zone
-     * @param mouseEvent - mouse click on system enter
-     */
-    public void login(MouseEvent mouseEvent) {
-        FXMLLoader loader = new FXMLLoader();
+    @Override
+    public void start(Stage primaryStage) throws Exception {
         try {
-            Parent root = loader.load(getClass().getResourceAsStream("/fxmls/loginXML.fxml"));
-            AView loginView = loader.getController();
-            loginView.set_controller(_controller);
-            loginView.set_cameFrom(Main.pStage.getScene());
 
-            Main.pStage.setScene(new Scene(root, 800, 400));
-            Main.pStage.show();
+            FXMLLoader fxml = new FXMLLoader(getClass().getResource("/fxmls/sample.fxml"));
+            primaryStage.setTitle("Vacation4U");
 
-            mouseEvent.consume();
+            Canvas canvas = new Canvas(1200, 1400);
 
-        } catch (IOException e) {
-            System.out.println("Something bad happened while trying to move to login screen :(");
-            System.out.println(e.getMessage());
-            e.printStackTrace();
+            GraphicsContext gc = canvas.getGraphicsContext2D();
+            String ams = getClass().getResource("/Pics/ams.jpg").toString();
+            Image amsIM = new Image(ams);
+            gc.drawImage(amsIM, 255, 95, 250, 180);
+
+            String london = getClass().getResource("/Pics/london.jpg").toString();
+            Image londonIM = new Image(london);
+            gc.drawImage(londonIM,675,95,250, 180);
+
+            String paris = getClass().getResource("/Pics/paris.jpg").toString();
+            Image parisIM = new Image(paris);
+            gc.drawImage(parisIM,675,405,250, 180);
+
+            String rome = getClass().getResource("/Pics/rome.jpg").toString();
+            Image romeIM = new Image(rome);
+            gc.drawImage(romeIM,255,405,250, 180);
+
+            Pane root = new Pane();
+            root = fxml.load();
+            root.getChildren().add(canvas);
+
+            Scene scene = new Scene(root, 1400, 700);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+
+            btn_ams.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent e) {
+                    FXMLLoader loader = new FXMLLoader();
+                    Stage details = new Stage();
+                    try {
+                        Parent root = loader.load(getClass().getResourceAsStream("/fxmls/readXML.fxml"));
+                        lbl_ams_details = new Label("Details" + "\n" + "More Details" + "\n" + "fooking more details");
+                        details.setTitle("Vacation4U");
+                        details.setScene(new Scene(root, 800, 400));
+                        details.setResizable(false);
+                        details.show();
+                    }
+                    catch(Exception exc){}
+
+                    e.consume();
+                }
+            });
         }
+        catch (Exception e){
+
+        }
+
     }
+
 }
