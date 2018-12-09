@@ -39,6 +39,7 @@ public class Main extends Application {
         String fxmlFile = "/fxmls/UnRegistered.fxml";
         Parent root = loader.load(getClass().getResourceAsStream(fxmlFile));
 
+
         // setting up
         Model model = new Model();
         Controller controller = new Controller();

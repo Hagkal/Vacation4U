@@ -9,7 +9,7 @@ import javafx.scene.input.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class ReadView extends AView {
+public class ReadView extends ARegisteredView {
 
     @FXML
     public TextField tf_userNameRead;
@@ -49,4 +49,14 @@ public class ReadView extends AView {
     }
 
 
+    @Override
+    public void prepareView(String username, boolean isManager) {
+        this._loggedUser = username;
+        this._manager = isManager;
+
+        if (!isManager){
+            tf_userNameRead.setText(username);
+            tf_userNameRead.setDisable(true);
+        }
+    }
 }

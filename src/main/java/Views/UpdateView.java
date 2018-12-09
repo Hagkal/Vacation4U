@@ -8,7 +8,7 @@ import javafx.scene.input.MouseEvent;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class UpdateView extends AView {
+public class UpdateView extends ARegisteredView {
 
     @FXML
     public Button btn_update_search;
@@ -62,6 +62,8 @@ public class UpdateView extends AView {
         dp_dateUpdate.setPromptText("");
         dp_dateUpdate.setDisable(true);
 
+        prepareView(_loggedUser, _manager);
+
         actionEvent.consume();
     }
 
@@ -101,7 +103,7 @@ public class UpdateView extends AView {
                 tf_lastName.setText(response.get(4));
                 tf_hometown.setText(response.get(5));
 
-
+                prepareView(_loggedUser, _manager);
 
             }
             else{
@@ -237,5 +239,16 @@ public class UpdateView extends AView {
         }
 
         return true;
+    }
+
+    @Override
+    public void prepareView(String username, boolean isManager) {
+        this._loggedUser = username;
+        this._manager = isManager;
+
+        if (!isManager){
+            tf_userNameRead.setText(username);
+            tf_userNameRead.setDisable(true);
+        }
     }
 }

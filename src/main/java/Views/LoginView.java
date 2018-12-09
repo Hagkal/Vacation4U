@@ -81,9 +81,12 @@ public class LoginView extends AView {
         FXMLLoader loader = new FXMLLoader();
         try {
             Parent root = loader.load(getClass().getResourceAsStream("/fxmls/RegisteredView.fxml"));
-            AView view = loader.getController();
+            RegisteredView view = loader.getController();
             view.set_controller(_controller);
             view.set_cameFrom(Main.pStage.getScene());
+
+            view._loggedUser = username;
+            view._manager = false; /* needs to be changed */
 
             Main.pStage.setScene(new Scene(root, 800, 400));
             Main.pStage.show();

@@ -5,24 +5,15 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.RegisteredView">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.RegisteredView">
 <children>
     <BorderPane fx:id="lyt_mainPane" prefHeight="400.0" prefWidth="600.0">
-        <top>
-            <Pane prefHeight="38.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-                <children>
-                    <Label alignment="CENTER" prefHeight="52.0" prefWidth="600.0" text="Vacation4U" textAlignment="CENTER">
-                        <font>
-                            <Font name="Arial Bold" size="24.0" />
-                        </font>
-                    </Label>
-                </children></Pane>
-        </top>
         <center>
             <Pane prefHeight="343.0" prefWidth="362.0" BorderPane.alignment="CENTER" />
         </center>
@@ -43,17 +34,14 @@
                 <center>
                     <VBox prefHeight="335.0" prefWidth="139.0" BorderPane.alignment="CENTER">
                         <children>
-                            <Button fx:id="btn_read" layoutX="10.0" layoutY="10.0" mnemonicParsing="false"
-                                    onMouseClicked="#setRead" text="חיפוש משתמש" />
+                            <Button fx:id="btn_read" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#setRead" text="חיפוש משתמש" />
                             <Separator layoutX="10.0" layoutY="35.0" prefHeight="23.0" prefWidth="106.0" />
-                            <Button fx:id="btn_update" layoutX="10.0" layoutY="53.0" mnemonicParsing="false"
-                                    onMouseClicked="#setUpdate" text="עדכון משתמש" />
+                            <Button fx:id="btn_update" layoutX="10.0" layoutY="53.0" mnemonicParsing="false" onMouseClicked="#setUpdate" text="עדכון משתמש" />
                             <Separator layoutX="10.0" layoutY="78.0" prefHeight="20.0" prefWidth="106.0" />
-                            <Button fx:id="btn_delete" layoutX="10.0" layoutY="96.0" mnemonicParsing="false"
-                                    onMouseClicked="#setDelete" text="מחיקת משתמש" />
+                            <Button fx:id="btn_delete" layoutX="10.0" layoutY="96.0" mnemonicParsing="false" onMouseClicked="#setDelete" text="מחיקת משתמש" />
                             <Separator layoutX="10.0" layoutY="127.0" prefHeight="20.0" prefWidth="106.0" />
-                            <Button fx:id="btn_exit" layoutX="10.0" layoutY="147.0" mnemonicParsing="false"
-                                    onMouseClicked="#setExit" text="יציאה" />
+                            <Button fx:id="btn_exit" layoutX="10.0" layoutY="147.0" mnemonicParsing="false" onMouseClicked="#logOut" text="התנתק" />
+                            <Button fx:id="btn_publishVacation" onMouseClicked="#setPublish" mnemonicParsing="false" text="פרסם חופשה" />
                         </children>
                     </VBox>
                 </center>
@@ -67,6 +55,18 @@
             </BorderPane>
 
         </left>
+         <top>
+            <HBox prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                    <Label alignment="CENTER" prefHeight="52.0" prefWidth="600.0" text="Vacation4U" textAlignment="CENTER">
+                        <font>
+                            <Font name="Arial Bold" size="24.0" />
+                        </font>
+                    </Label>
+                  <Text fx:id="txt_welcome" layoutX="150.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+               </children>
+            </HBox>
+         </top>
     </BorderPane>
 </children>
 </AnchorPane>
