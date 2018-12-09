@@ -1,5 +1,7 @@
 package Models;
 
+
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -8,7 +10,15 @@ public class Model {
     private final String DB_URL = "jdbc:sqlite:src/main/resources/DB/DataBase.db";
 
     // helpful attributes
+//    private MainController c;
+//    private LoginController lc;
     private ResultSet m_results;
+
+    // setters
+//    public void set_controller(MainController c){
+ //       this.c = c;
+ //   }
+
 
 
     /**
@@ -53,10 +63,11 @@ public class Model {
      * a method to create a user
      * @param attributes - list of needed attributed by a specific order!
      */
-    public String create_user(ArrayList<String> attributes){
+    public void create_user(ArrayList<String> attributes){
 
         if (user_exist(attributes.get(0))){
-            return "Username: " + attributes.get(0) + "\nalready exist!";
+ //           c.create_response("Username: " + attributes.get(0) + "\nalready exist!");
+            return;
         }
 
         String sql = "INSERT INTO Users (UserName,Password,Birthday,FirstName,LastName,Hometown)"
@@ -72,10 +83,10 @@ public class Model {
             pstmt.setString(6, attributes.get(5)); // hometown
 
             pstmt.executeUpdate();
-            return "Created :)";
+ //           c.create_response("Created :)");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            return "Failed :/";
+//            c.create_response("Failed :/");
         }
     }
 
@@ -83,7 +94,7 @@ public class Model {
      * a method to read a user tuple by it's UserName
      * @param userName - the username desired
      */
-    public ArrayList<String> read_user(String userName){
+    public void read_user(String userName){
         String sql = "SELECT * FROM Users WHERE UserName = ?";
 
         try (Connection conn = this.make_connection();
@@ -100,10 +111,10 @@ public class Model {
             toReturn.add(m_results.getString(5));
             toReturn.add(m_results.getString(6));
 
-            return toReturn;
+//            c.read_response(toReturn);
         }catch (SQLException e){
             System.out.println(e.getMessage());
-            return null;
+ //           c.read_response(null);
         }
     }
 
@@ -112,11 +123,18 @@ public class Model {
      * @param toChange - username to be changed
      * @param newatt - arraylist of attributes to update
      */
-    public String update_user(String toChange, ArrayList<String> newatt){
+    public void update_user(String toChange, ArrayList<String> newatt){
         // checking if the new username already exist
         if (!user_exist(toChange)){
-            return "User: " + toChange +"\ndoes not exist!";
+//            c.update_response("User: " + toChange +"\ndoes not exist!");
+            return;
         }
+        /**else{
+            if (user_exist(newatt.get(0))){
+                c.create_response("Username: " + newatt.get(0) + " already exist.");
+                return;
+            }
+        }**/
 
         String sql = "UPDATE Users "
                 + "SET UserName = ? , "
@@ -141,10 +159,10 @@ public class Model {
 
             // update
             pstmt.executeUpdate();
-            return "Update success";
+ //           c.update_response("Update success");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            return "Update failed";
+//            c.update_response("Update failed");
         }
     }
 
@@ -152,9 +170,10 @@ public class Model {
      * a method to delete user
      * @param toDelete - username to delete
      */
-    public String delete_user(String toDelete){
+    public void delete_user(String toDelete){
         if (!user_exist(toDelete)){
-            return "Username: " + toDelete + "\ndoes not exist";
+ //           c.delete_response("Username: " + toDelete + "\ndoes not exist");
+            return;
         }
 
         String sql = "DELETE FROM Users WHERE UserName = ?";
@@ -167,33 +186,34 @@ public class Model {
 
             // execute the delete statement
             pstmt.executeUpdate();
-            return "Delete success";
+   //         c.delete_response("Delete success");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            return "Delete failed";
+  //          c.delete_response("Delete failed");
         }
     }
 
-    public String login(String username, String password) {
-        String sql = "SELECT * FROM Users WHERE UserName = ? AND Password = ?";
+    public void read_update_user(String s) {
+        String sql = "SELECT * FROM Users WHERE UserName = ?";
 
         try (Connection conn = this.make_connection();
              PreparedStatement pstmt = conn.prepareStatement(sql)){
 
-            pstmt.setString(1, username);
-            pstmt.setString(2, password);
+            pstmt.setString(1, s);
             m_results = pstmt.executeQuery();
-            String toReturn = "Error find";
+            ArrayList<String> toReturn = new ArrayList<>();
 
-            if (m_results.next()){
-                toReturn = "OK";
-            }
+            toReturn.add(m_results.getString(1));
+            toReturn.add(m_results.getString(2));
+            toReturn.add(m_results.getString(3));
+            toReturn.add(m_results.getString(4));
+            toReturn.add(m_results.getString(5));
+            toReturn.add(m_results.getString(6));
 
-            return toReturn;
+ //           c.read_update_response(toReturn);
         }catch (SQLException e){
             System.out.println(e.getMessage());
-            return null;
+ //           c.read_update_response(null);
         }
-
     }
 }
