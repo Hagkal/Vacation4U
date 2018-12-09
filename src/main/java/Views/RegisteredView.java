@@ -22,6 +22,7 @@ public class RegisteredView extends ARegisteredView{
     public Text txt_welcome;
     public Button btn_publishVacation;
     public Button btn_mailBox;
+    public Button btn_search;
 
 
     /**
@@ -117,4 +118,22 @@ public class RegisteredView extends ARegisteredView{
             popProblem("Error while trying to load update interface\n" + e.getMessage());
         }
     }
+
+
+    public void setSearch(MouseEvent mouseEvent) {
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            lyt_mainPane.setCenter(loader.load(getClass().getResourceAsStream("/fxmls/tableXML.fxml")));
+
+            ARegisteredView v = loader.getController();
+            v.set_controller(_controller);
+            v.set_cameFrom(_cameFrom);
+            v.prepareView(_loggedUser, _manager);
+
+        } catch (IOException e) {
+            popProblem("Error while trying to load search interface\n" + e.getMessage());
+        }
+        mouseEvent.consume();
+    }
+
 }

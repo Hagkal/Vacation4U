@@ -72,4 +72,8 @@ public class Controller {
     public String approveVacation(String username, String vacationId, String vacationBuyer){
         return _model.approveVacation(username, vacationId, vacationBuyer);
     }
+
+    public ArrayList<Vacation> getAllVacations() {
+        return _model.getAllVacations();
+    }
 }

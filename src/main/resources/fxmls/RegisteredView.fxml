@@ -43,6 +43,7 @@
                             <Button fx:id="btn_exit" layoutX="10.0" layoutY="147.0" mnemonicParsing="false" onMouseClicked="#logOut" text="התנתק" />
                             <Button fx:id="btn_publishVacation" mnemonicParsing="false" onMouseClicked="#setPublish" text="פרסם חופשה" />
                             <Button fx:id="btn_mailBox" mnemonicParsing="false" text="תיבת דואר" />
+                            <Button fx:id="btn_search" onMouseClicked="#setSearch" mnemonicParsing="false" text="חיפוש חופשות" />
                         </children>
                     </VBox>
                 </center>
