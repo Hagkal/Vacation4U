@@ -1,12 +1,13 @@
 package Views;
 
+import Controllers.Main;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
-public class DeleteView extends AView {
+public class DeleteView extends ARegisteredView {
 
     @FXML
     public Label lbl_userName;
@@ -14,12 +15,14 @@ public class DeleteView extends AView {
     public TextField tf_userNameDelete;
     public Button btn_delete;
 
+
     /**
      * method to send a delete of a user
      * @param mouseEvent - mouse click on 'delete'
      */
     public void send_delete(MouseEvent mouseEvent) {
         String username = tf_userNameDelete.getText();
+        mouseEvent.consume();
 
         //set error labels to be not visible
         if (username.isEmpty()){
@@ -35,6 +38,22 @@ public class DeleteView extends AView {
                 popProblem(response);*/
         }
 
-        mouseEvent.consume();
+        if (!_manager){
+            popInfo("You are now logged out of the service");
+            Main.pStage.setScene(_cameFrom);
+            Main.pStage.show();
+        }
+
+    }
+
+    @Override
+    public void prepareView(String username, boolean isManager) {
+        this._loggedUser = username;
+        this._manager = isManager;
+
+        if (!isManager){
+            tf_userNameDelete.setText(username);
+            tf_userNameDelete.setDisable(true);
+        }
     }
 }

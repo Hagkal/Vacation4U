@@ -1,4 +1,4 @@
-package User;
+package Users;
 
 
 import javafx.scene.image.Image;

@@ -1,13 +1,15 @@
 package Controllers;
 
 import Models.Model;
+import Vacations.Vacation;
+import Vacations.VacationRequest;
 
 import java.util.ArrayList;
 
 public class Controller {
 
     Model _model;
-/*
+  
     public String create_user(ArrayList<String> toSend) {
         return _model.create_user(toSend);
     }
@@ -38,7 +40,6 @@ public class Controller {
         this._model = m;
     }
 
-*/
     /**
      * method to convert date into string
      * @param s - the DB date
@@ -55,8 +56,20 @@ public class Controller {
         return date.toString();
     }
 
-   /* public String login(String username, String password) {
+   public String login(String username, String password) {
         return _model.login(username, password);
     }
- */
+
+    public String publishVacation(Vacation toPublish) {
+        return _model.publishVacation(toPublish);
+    }
+
+    public ArrayList<VacationRequest> getVacationsForApproval(String username) {
+        ArrayList<VacationRequest> retrieved = _model.getVacationsForApproval(username);
+        return retrieved;
+    }
+
+    public String approveVacation(String username, String vacationId, String vacationBuyer){
+        return _model.approveVacation(username, vacationId, vacationBuyer);
+    }
 }

@@ -1,24 +1,27 @@
 package Views;
 
+import Controllers.Main;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
 
-public class RegisteredView extends AView{
+public class RegisteredView extends ARegisteredView{
 
     @FXML
     public Button btn_exit;
     public Button btn_read;
     public Button btn_update;
     public Button btn_delete;
-
     public BorderPane lyt_mainPane;
+    public Text txt_welcome;
+    public Button btn_publishVacation;
+    public Button btn_mailBox;
 
 
     /**
@@ -30,8 +33,9 @@ public class RegisteredView extends AView{
         try {
             lyt_mainPane.setCenter(loader.load(getClass().getResourceAsStream("/fxmls/readXML.fxml")));
 
-            AView v = loader.getController();
+            ARegisteredView v = loader.getController();
             v.set_controller(_controller);
+            v.prepareView(_loggedUser, _manager);
 
         } catch (IOException e) {
             popProblem("Error while trying to load read interface\n" + e.getMessage());
@@ -49,8 +53,9 @@ public class RegisteredView extends AView{
         try {
             lyt_mainPane.setCenter(loader.load(getClass().getResourceAsStream("/fxmls/updateXML.fxml")));
 
-            AView v = loader.getController();
+            ARegisteredView v = loader.getController();
             v.set_controller(_controller);
+            v.prepareView(_loggedUser, _manager);
 
         } catch (IOException e) {
             popProblem("Error while trying to load update interface\n" + e.getMessage());
@@ -68,8 +73,10 @@ public class RegisteredView extends AView{
         try {
             lyt_mainPane.setCenter(loader.load(getClass().getResourceAsStream("/fxmls/deleteXML.fxml")));
 
-            AView v = loader.getController();
+            ARegisteredView v = loader.getController();
             v.set_controller(_controller);
+            v.set_cameFrom(_cameFrom);
+            v.prepareView(_loggedUser, _manager);
 
         } catch (IOException e) {
             popProblem("Error while trying to load update interface\n" + e.getMessage());
@@ -82,10 +89,32 @@ public class RegisteredView extends AView{
      * method to to exit the program
      * @param mouseEvent - even of close
      */
-    public void setExit(MouseEvent mouseEvent) {
-        Stage stage = (Stage) btn_exit.getScene().getWindow();
+    public void logOut(MouseEvent mouseEvent) {
         mouseEvent.consume();
-        stage.close();
+        Main.pStage.setScene(_cameFrom);
+        Main.pStage.show();
     }
 
+    @Override
+    public void prepareView(String username, boolean isManager) {
+        this._loggedUser = username;
+        // txt_welcome = new Text("Welcome back " + _loggedUser + "!");
+        this._manager = isManager;
+    }
+
+    public void setPublish(MouseEvent mouseEvent) {
+        mouseEvent.consume();
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            lyt_mainPane.setCenter(loader.load(getClass().getResourceAsStream("/fxmls/publishXML.fxml")));
+
+            ARegisteredView v = loader.getController();
+            v.set_controller(_controller);
+            v.set_cameFrom(_cameFrom);
+            v.prepareView(_loggedUser, _manager);
+
+        } catch (IOException e) {
+            popProblem("Error while trying to load update interface\n" + e.getMessage());
+        }
+    }
 }
