@@ -19,9 +19,9 @@ public class RegisteredView extends ARegisteredView{
     public Button btn_update;
     public Button btn_delete;
     public BorderPane lyt_mainPane;
-    public TextField tf_welcome;
     public Text txt_welcome;
     public Button btn_publishVacation;
+    public Button btn_mailBox;
 
 
     /**

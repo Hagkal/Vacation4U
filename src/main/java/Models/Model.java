@@ -1,5 +1,7 @@
 package Models;
 
+import Vacation.Vacation;
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -195,5 +197,35 @@ public class Model {
             return null;
         }
 
+    }
+
+
+    /**
+     * a method to create a vacation
+     * @param toPublish - object representing a vacation
+     */
+    public String publishVacation (Vacation toPublish){
+
+        String sql = "INSERT INTO Vacations (SellerName,Destination,ArrivalDate,DepartureDate,Airline,TicketAmount,Price,FlightOnly,Status)"
+                + " VALUES(?,?,?,?,?,?,?,?,?)";
+
+        try (Connection conn = this.make_connection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, toPublish._sellingUser);
+            pstmt.setString(2, toPublish._destination );
+            pstmt.setString(3, toPublish._returnDate);
+            pstmt.setString(4, toPublish._departureDate);
+            pstmt.setString(5, toPublish._airline);
+            pstmt.setString(6, toPublish._quantity);
+            pstmt.setString(7, toPublish._price);
+            pstmt.setString(8, "true");
+            pstmt.setString(9, "Published");
+            pstmt.executeUpdate();
+
+            return "Created :)";
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return "Failed :/";
+        }
     }
 }

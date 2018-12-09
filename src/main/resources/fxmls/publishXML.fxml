@@ -15,15 +15,15 @@
                <children>
                   <TextField fx:id="tf_destination" promptText="יעד החופשה" />
                   <DatePicker fx:id="dp_departure" promptText="תאריך יציאה" />
-                  <DatePicker fx:id="dp_arrival" promptText="תאריך חזרה" />
-                  <TextField fx:id="tf_price" layoutX="10.0" layoutY="166.0" promptText="חברת תעופה" />
-                  <TextField fx:id="airline" promptText="כמות כרטיסים" />
-                  <TextField fx:id="tf_quantity" layoutX="10.0" layoutY="127.0" promptText="מחיר" />
+                  <DatePicker fx:id="dp_return" promptText="תאריך חזרה" />
+                  <TextField fx:id="tf_airline" layoutX="10.0" layoutY="166.0" promptText="חברת תעופה" />
+                  <TextField fx:id="tf_quantity" promptText="כמות כרטיסים" />
+                  <TextField fx:id="tf_price" layoutX="10.0" layoutY="127.0" promptText="מחיר" />
                </children>
             </VBox>
             <VBox prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Button fx:id="btn_publish" mnemonicParsing="false" text="פרסם!" />
+                  <Button fx:id="btn_publish" onMouseClicked="#publishVacation" mnemonicParsing="false" text="פרסם!" />
                </children>
             </VBox>
          </children>

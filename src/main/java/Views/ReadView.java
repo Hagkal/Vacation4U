@@ -36,7 +36,6 @@ public class ReadView extends ARegisteredView {
             }
             else {
                 String s = "Username: " + response.get(0) + "\n" +
-                        "Password: " + response.get(1) + "\n" +
                         "Birthday: " + response.get(2) + "\n" +
                         "First Name: " + response.get(3) + "\n" +
                         "Last Name: " + response.get(4) + "\n" +

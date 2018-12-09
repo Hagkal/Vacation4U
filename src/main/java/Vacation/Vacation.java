@@ -8,44 +8,30 @@ import java.util.Date;
  * this is the Vacation type class.
  */
 public class Vacation {
-    private Date date;
-    private double price;
-    private User sellingUser;
-    private String destination;
-    private boolean onlyForFlight;
+    public String _departureDate;
+    public String _returnDate;
+    public String _price;
+    public String _sellingUser;
+    public String _destination;
+    public String _onlyForFlight;
+    public String _airline;
+    public String _quantity;
 
     /** Vacation type constructor
      * @param destination vacation destination
-     * @param date the date that the vacation will attend
      * @param price the price that the seller demand for the vacation
      * @param user is the seller
      */
-    public Vacation(String destination, Date date, double price , User user,boolean onlyForFlight){
-        this.sellingUser = user;
-        this.onlyForFlight = onlyForFlight;
-        this.date = date;
-        this.destination = destination;
-        this.price = price;
+    public Vacation(String user, String destination, String departureDate, String returnDate, String price , String quantity, String airline ){
+        _sellingUser = user;
+        _destination = destination;
+        _departureDate = departureDate;
+        _returnDate = returnDate;
+        _price = price;
+        _quantity = quantity;
+        _airline = airline;
 
-    }
 
-    public Date getDate() {
-        return date;
-    }
 
-    public double getPrice() {
-        return price;
-    }
-
-    public User getSellingUser() {
-        return sellingUser;
-    }
-
-    public String getDestination() {
-        return destination;
-    }
-
-    public boolean isOnlyForFlight() {
-        return onlyForFlight;
     }
 }

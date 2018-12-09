@@ -41,7 +41,8 @@
                             <Button fx:id="btn_delete" layoutX="10.0" layoutY="96.0" mnemonicParsing="false" onMouseClicked="#setDelete" text="מחיקת משתמש" />
                             <Separator layoutX="10.0" layoutY="127.0" prefHeight="20.0" prefWidth="106.0" />
                             <Button fx:id="btn_exit" layoutX="10.0" layoutY="147.0" mnemonicParsing="false" onMouseClicked="#logOut" text="התנתק" />
-                            <Button fx:id="btn_publishVacation" onMouseClicked="#setPublish" mnemonicParsing="false" text="פרסם חופשה" />
+                            <Button fx:id="btn_publishVacation" mnemonicParsing="false" onMouseClicked="#setPublish" text="פרסם חופשה" />
+                            <Button fx:id="btn_mailBox" mnemonicParsing="false" text="תיבת דואר" />
                         </children>
                     </VBox>
                 </center>

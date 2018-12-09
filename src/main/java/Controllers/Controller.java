@@ -1,6 +1,7 @@
 package Controllers;
 
 import Models.Model;
+import Vacation.Vacation;
 
 import java.util.ArrayList;
 
@@ -57,5 +58,9 @@ public class Controller {
 
     public String login(String username, String password) {
         return _model.login(username, password);
+    }
+
+    public String publishVacation(Vacation toPublish) {
+        return _model.publishVacation(toPublish);
     }
 }
