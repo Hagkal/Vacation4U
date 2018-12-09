@@ -1,4 +1,4 @@
-package Vacation;
+package Vacations;
 
 public class VacationSell {
 }

@@ -1,6 +1,7 @@
 package Models;
 
-import Vacation.Vacation;
+import Vacations.Vacation;
+import Vacations.VacationRequest;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,8 +13,12 @@ public class Model {
     // helpful attributes
     private ResultSet m_results;
 
+    public Model(){
+        // createUsersTable();
+        // createVacationstable();
+    }
 
-    /**
+        /**
      * a method to return a connection with the Database
      * @return - a connection if success, null otherwise
      */
@@ -117,7 +122,7 @@ public class Model {
     public String update_user(String toChange, ArrayList<String> newatt){
         // checking if the new username already exist
         if (!user_exist(toChange)){
-            return "User: " + toChange +"\ndoes not exist!";
+            return "Users: " + toChange +"\ndoes not exist!";
         }
 
         String sql = "UPDATE Users "
@@ -176,6 +181,12 @@ public class Model {
         }
     }
 
+    /**
+     * method to check login
+     * @param username - given username
+     * @param password - given password
+     * @return - string of success or fail
+     */
     public String login(String username, String password) {
         String sql = "SELECT * FROM Users WHERE UserName = ? AND Password = ?";
 
@@ -227,5 +238,111 @@ public class Model {
             System.out.println(e.getMessage());
             return "Failed :/";
         }
+    }
+
+    /**
+     * method to retrieve all vacations waiting for approval
+     * @param username - the username of which vacations are waiting for approval
+     * @return - list of vacation requests
+     */
+    public ArrayList<VacationRequest> getVacationsForApproval(String username) {
+        String sql = "SELECT * FROM pendingVacations WHERE SellerName = ?";
+
+        try (Connection conn = this.make_connection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)){
+
+            pstmt.setString(1, username);
+            m_results = pstmt.executeQuery();
+
+            ArrayList<VacationRequest> retrieved = new ArrayList<>();
+
+            while (m_results.next()){
+                String vacationId = m_results.getString(1);
+                String buyer = m_results.getString(3);
+                String date = m_results.getString(4);
+
+                VacationRequest r = new VacationRequest(buyer, date, vacationId);
+                retrieved.add(r);
+            }
+
+
+            return retrieved;
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * method to approve a vacation of a buyer
+     * @param vacationId - the vacation id
+     * @param vacationBuyer - the buyer username
+     * @return - success or fail
+     */
+    public String approveVacation(String username, String vacationId, String vacationBuyer) {
+        String sql = "UPDATE pendingVacations\n"
+                + "SET status = approved\n"
+                + "WHERE\n"
+                + "PotentialBuyerName = ? AND "
+                + "VacationId = ?";
+
+        try(
+                Connection conn = this.make_connection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)
+                ) {
+
+            pstmt.setString(1, vacationBuyer);
+            pstmt.setString(2, vacationId);
+            pstmt.executeQuery();
+
+            return "Approved buyer!";
+        }
+        catch (SQLException e){
+            System.out.println("something bad happaned while trying to update pendingVacations table :(");
+            System.out.println(e.getMessage());
+            return "error while updating the approval";
+        }
+    }
+
+
+    public ArrayList<Vacation> getAllVacations(){
+        String sql = "SELECT * FROM Vacations WHERE Status NOT IN ('sold')";
+
+        try (
+                Connection conn = make_connection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)
+                ) {
+
+            m_results = pstmt.executeQuery();
+            ArrayList<Vacation> vacations = new ArrayList<>();
+
+            while (m_results.next()){
+                String vacationId = m_results.getString(1);
+                String seller = m_results.getString(2);
+                String destination = m_results.getString(3);
+                String returnDate = m_results.getString(4);
+                String departureDate = m_results.getString(5);
+                String airline = m_results.getString(6);
+                String ticketAmount = m_results.getString(7);
+                String price = m_results.getString(8);
+
+                Vacation v = new Vacation(seller, destination, departureDate, returnDate, price, ticketAmount, airline);
+                v._id = vacationId;
+                vacations.add(v);
+            }
+
+            return vacations;
+
+        }catch (SQLException e){
+            System.out.println("Something bad happaned while retrieving data from Vacations");
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+
+    public static void main(String[] args){
+        Model m = new Model();
+        ArrayList<Vacation> vac = m.getAllVacations();
     }
 }

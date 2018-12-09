@@ -1,7 +1,8 @@
 package Controllers;
 
 import Models.Model;
-import Vacation.Vacation;
+import Vacations.Vacation;
+import Vacations.VacationRequest;
 
 import java.util.ArrayList;
 
@@ -62,5 +63,14 @@ public class Controller {
 
     public String publishVacation(Vacation toPublish) {
         return _model.publishVacation(toPublish);
+    }
+
+    public ArrayList<VacationRequest> getVacationsForApproval(String username) {
+        ArrayList<VacationRequest> retrieved = _model.getVacationsForApproval(username);
+        return retrieved;
+    }
+
+    public String approveVacation(String username, String vacationId, String vacationBuyer){
+        return _model.approveVacation(username, vacationId, vacationBuyer);
     }
 }

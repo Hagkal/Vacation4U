@@ -1,6 +1,6 @@
 package Views;
 
-import Vacation.Vacation;
+import Vacations.Vacation;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
@@ -96,7 +96,7 @@ public class PublishVactionView extends ARegisteredView {
                 popProblem(response);
             }
             else {
-                popInfo("Vacation published!");
+                popInfo("Vacations published!");
             }
         }
     }

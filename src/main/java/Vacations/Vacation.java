@@ -1,13 +1,10 @@
-package Vacation;
-
-import User.User;
-
-import java.util.Date;
+package Vacations;
 
 /**
- * this is the Vacation type class.
+ * this is the Vacations type class.
  */
 public class Vacation {
+    public String _id;
     public String _departureDate;
     public String _returnDate;
     public String _price;
@@ -17,7 +14,7 @@ public class Vacation {
     public String _airline;
     public String _quantity;
 
-    /** Vacation type constructor
+    /** Vacations type constructor
      * @param destination vacation destination
      * @param price the price that the seller demand for the vacation
      * @param user is the seller
