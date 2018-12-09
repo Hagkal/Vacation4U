@@ -28,11 +28,11 @@ public class DeleteView extends AView {
         else {
             lbl_userNameDeleteErr.setVisible(false);
 
-            String response = _controller.delete_user(username);
+        /*    String response = _controller.delete_user(username);
             if (response.equals("Delete success"))
                 popInfo(response);
             else
-                popProblem(response);
+                popProblem(response);*/
         }
 
         mouseEvent.consume();

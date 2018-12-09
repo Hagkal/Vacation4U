@@ -70,14 +70,14 @@ public class LoginView extends AView {
             return;
         }
 
-        String response = _controller.login(username, password);
+       /* String response = _controller.login(username, password);
         if (response.contains("Error") &&
                 response.contains("find")){
             popProblem("Login failed!\n" +
                     "Make sure you typed in a proper Username and Password");
             return;
         }
-
+*/
         FXMLLoader loader = new FXMLLoader();
         try {
             Parent root = loader.load(getClass().getResourceAsStream("/fxmls/RegisteredView.fxml"));
