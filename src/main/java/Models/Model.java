@@ -292,6 +292,10 @@ public class Model {
      * @return - success or fail
      */
     public String approveVacation(String username, String vacationId, String vacationBuyer) {
+        if (check_approved(username, vacationId)){
+            return "error\nYou already approved someone for that vacation\nPlease wait for him to respond";
+        }
+
         String sql = "UPDATE pendingVacations " +
                 "SET status = ? " +
                 "WHERE VacationId = ?";
@@ -362,6 +366,8 @@ public class Model {
      * @return - success or fail
      */
     public String bidVacation(String sellerName, String bidderUsername, String vacationId, String price) {
+
+
         String sql1 = "UPDATE Vacations "
                 + "SET Status = 'bid' "
                 + "WHERE VacationId = ?";
@@ -403,6 +409,29 @@ public class Model {
         }
     }
 
+    private boolean check_approved(String sellerName, String vacationId) {
+
+        String sql = "SELECT * FROM pendingVacations WHERE SellerName = ? AND VacationId = ? AND status IN('payment')";
+
+        try (
+                Connection conn = make_connection();
+                PreparedStatement pst = conn.prepareStatement(sql);
+                ){
+
+            pst.setString(1, sellerName);
+            pst.setInt(2, Integer.valueOf(vacationId));
+
+            m_results = pst.executeQuery();
+
+            return m_results.next();
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+
     /**
      *
      * @param username - the username of which to get the status
@@ -441,21 +470,31 @@ public class Model {
     }
 
 
-    public String payForVacation(String vacationId, String username){
+    public String payForVacation(String vacationId, String username, String seller, String price){
         String sql = "DELETE FROM pendingVacations WHERE VacationId = ? AND potentialBuyerName = ?";
         String sql2 = "UPDATE Vacations SET Status = 'sold'";
+        String sqlInsertSold = "INSERT INTO SoldVacations (VacationId,SellerName,BuyerName,purchaseDate,Price)"
+                +   " VALUES(?,?,?,?,?)";
 
         try (
                 Connection conn = make_connection();
                 PreparedStatement pst1 = conn.prepareStatement(sql);
                 PreparedStatement pst2 = conn.prepareStatement(sql2);
+                PreparedStatement pstSold = conn.prepareStatement(sqlInsertSold);
                 ){
 
             pst1.setInt(1, Integer.valueOf(vacationId));
             pst1.setString(2, username);
 
+            pstSold.setInt(1, Integer.valueOf(vacationId));
+            pstSold.setString(2, seller);
+            pstSold.setString(3, username);
+            pstSold.setString(4, LocalDate.now().toString());
+            pstSold.setString(5, price);
+
             pst1.executeUpdate();
             pst2.executeUpdate();
+            pstSold.executeUpdate();
 
             return "Payed success";
 
@@ -475,6 +514,6 @@ public class Model {
 
       //  m.bidVacation("gg", "tt", "2", "26");
         //m.approveVacation("tt", "5", "gg");
-        m.payForVacation("5", "gg");
+        m.payForVacation("5", "gg", "tt", "50");
     }
 }
