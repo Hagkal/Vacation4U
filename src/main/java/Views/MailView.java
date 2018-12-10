@@ -1,6 +1,6 @@
 package Views;
 
-import Vacations.VacationApprove;
+import Vacations.VacationPayment;
 import Vacations.VacationRequest;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -40,9 +40,9 @@ public class MailView extends ARegisteredView {
         waitingForAuthorizationList.setPrefHeight(150);
         bp_waiting.setCenter(waitingForAuthorizationList);
 
-        ArrayList<VacationApprove> vacationsToPay = _controller.getVacationsForPayment(username);
+        ArrayList<VacationPayment> vacationsToPay = _controller.getVacationsForPayment(username);
         if (vacationsToPay != null) {
-            for (VacationApprove v : vacationsToPay) {
+            for (VacationPayment v : vacationsToPay) {
                 id = v._vID;
                 seller = v._seller;
                 date = v._date;

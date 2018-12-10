@@ -1,7 +1,7 @@
 package Models;
 
 import Vacations.Vacation;
-import Vacations.VacationApprove;
+import Vacations.VacationPayment;
 import Vacations.VacationRequest;
 
 import java.sql.*;
@@ -257,12 +257,15 @@ public class Model {
      * @return - list of vacation requests
      */
     public ArrayList<VacationRequest> getVacationsForApproval(String username) {
-        String sql = "SELECT * FROM pendingVacations WHERE SellerName = ?";
+        String sql = "SELECT * FROM pendingVacations WHERE SellerName = ? "
+                + "AND VacationId NOT IN ( SELECT VacationId FROM pendingVacations WHERE SellerName = ? AND " +
+                "status IN ('payment') )";
 
         try (Connection conn = this.make_connection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, username);
+            pstmt.setString(2, username);
             m_results = pstmt.executeQuery();
 
             ArrayList<VacationRequest> retrieved = new ArrayList<>();
@@ -292,6 +295,10 @@ public class Model {
      * @return - success or fail
      */
     public String approveVacation(String username, String vacationId, String vacationBuyer) {
+        if (check_approved(username, vacationId)){
+            return "error\nYou already approved someone for that vacation\nPlease wait for him to respond";
+        }
+
         String sql = "UPDATE pendingVacations " +
                 "SET status = ? " +
                 "WHERE VacationId = ?";
@@ -362,6 +369,8 @@ public class Model {
      * @return - success or fail
      */
     public String bidVacation(String sellerName, String bidderUsername, String vacationId, String price) {
+
+
         String sql1 = "UPDATE Vacations "
                 + "SET Status = 'bid' "
                 + "WHERE VacationId = ?";
@@ -392,19 +401,54 @@ public class Model {
         }
         catch (SQLException e){
             System.out.println("something bad happened while inserting into pendingVacations :(");
-            System.out.println(e.getMessage());
+            System.out.println(e.getMessage() + "\n" + e.getErrorCode());
+
+            if (e.getErrorCode() == 19){
+                return "error! \nYou already placed a bid for that vacation!\nWait patiently for the seller to approve :)";
+            }
+
+
             return "error";
         }
     }
+
+    /**
+     * checking if a seller already approved someone for a specific vacation
+     * @param sellerName - the seller of the vacation
+     * @param vacationId - id of that vacation
+     * @return - true if already approved someone, false otherwise
+     */
+    private boolean check_approved(String sellerName, String vacationId) {
+
+        String sql = "SELECT * FROM pendingVacations WHERE SellerName = ? AND VacationId = ? AND status IN('payment')";
+
+        try (
+                Connection conn = make_connection();
+                PreparedStatement pst = conn.prepareStatement(sql);
+                ){
+
+            pst.setString(1, sellerName);
+            pst.setInt(2, Integer.valueOf(vacationId));
+
+            m_results = pst.executeQuery();
+
+            return m_results.next();
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+            return true;
+        }
+    }
+
 
     /**
      *
      * @param username - the username of which to get the status
      * @return - list of vacations for payment
      */
-    public ArrayList<VacationApprove> getVacationsForPayment(String username){
+    public ArrayList<VacationPayment> getVacationsForPayment(String username){
         String sql = "SELECT * FROM pendingVacations WHERE potentialBuyerName = ? AND " +
-                "status = payment";
+                "status IN ('payment')";
 
         try (
                 Connection conn = make_connection();
@@ -414,14 +458,14 @@ public class Model {
             pstm.setString(1, username);
             m_results = pstm.executeQuery();
 
-            ArrayList<VacationApprove> forPayment = new ArrayList<>();
+            ArrayList<VacationPayment> forPayment = new ArrayList<>();
             while (m_results.next()){
                 String vID = m_results.getString(1);
                 String sellerName = m_results.getString(3);
                 String date = m_results.getString(4);
                 String price = m_results.getString(5);
 
-                forPayment.add(new VacationApprove(vID,sellerName,date, price));
+                forPayment.add(new VacationPayment(vID,sellerName,date, price));
 
             }
 
@@ -435,21 +479,31 @@ public class Model {
     }
 
 
-    public String payForVacation(String vacationId, String username){
+    public String payForVacation(String vacationId, String username, String seller, String price){
         String sql = "DELETE FROM pendingVacations WHERE VacationId = ? AND potentialBuyerName = ?";
         String sql2 = "UPDATE Vacations SET Status = 'sold'";
+        String sqlInsertSold = "INSERT INTO SoldVacations (VacationId,SellerName,BuyerName,purchaseDate,Price)"
+                +   " VALUES(?,?,?,?,?)";
 
         try (
                 Connection conn = make_connection();
                 PreparedStatement pst1 = conn.prepareStatement(sql);
                 PreparedStatement pst2 = conn.prepareStatement(sql2);
+                PreparedStatement pstSold = conn.prepareStatement(sqlInsertSold);
                 ){
 
             pst1.setInt(1, Integer.valueOf(vacationId));
             pst1.setString(2, username);
 
+            pstSold.setInt(1, Integer.valueOf(vacationId));
+            pstSold.setString(2, seller);
+            pstSold.setString(3, username);
+            pstSold.setString(4, LocalDate.now().toString());
+            pstSold.setString(5, price);
+
             pst1.executeUpdate();
             pst2.executeUpdate();
+            pstSold.executeUpdate();
 
             return "Payed success";
 
@@ -469,6 +523,6 @@ public class Model {
 
       //  m.bidVacation("gg", "tt", "2", "26");
         //m.approveVacation("tt", "5", "gg");
-        m.payForVacation("5", "gg");
+        m.payForVacation("5", "gg", "tt", "50");
     }
 }

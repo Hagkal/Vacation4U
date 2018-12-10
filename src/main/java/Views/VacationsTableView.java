@@ -67,9 +67,9 @@ public class VacationsTableView extends ARegisteredView{
             selectedVacationDetails[3] = _loggedUser;//logged user
           
             String response = _controller.bidVacation(selectedVacationDetails[1], selectedVacationDetails[3], selectedVacationDetails[0], selectedVacationDetails[2]);
-            if (response.equals("Bid success"))
+            if (response.contains("Bid success"))
                 popInfo(response);
-            else if (response.equals("error"))
+            else if (response.contains("error"))
 
                 popProblem(response);
 

@@ -2,7 +2,7 @@ package Controllers;
 
 import Models.Model;
 import Vacations.Vacation;
-import Vacations.VacationApprove;
+import Vacations.VacationPayment;
 import Vacations.VacationRequest;
 
 import java.util.ArrayList;
@@ -83,7 +83,7 @@ public class Controller {
         return _model.bidVacation(sellerName, bidderUsername, vacationId, price);
     }
 
-    public ArrayList<VacationApprove> getVacationsForPayment(String username){
+    public ArrayList<VacationPayment> getVacationsForPayment(String username){
         return _model.getVacationsForPayment(username);
     }
 
