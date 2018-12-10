@@ -20,7 +20,7 @@ public class Controller {
         ArrayList<String> response = _model.read_user(username);
 
         if (response!=null){
-            response.set(2, convertTimeToText(response.get(2)));
+            //response.set(2, convertTimeToText(response.get(2)));
             return response;
         }
 
@@ -91,5 +91,9 @@ public class Controller {
         return _model.payForVacation(vacationId, username, seller, price, method);
     }
 
+
+    public ArrayList<Vacation> getMyVacations(String username){
+        return _model.getMyVacations(username);
+    }
 
 }
