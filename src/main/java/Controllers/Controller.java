@@ -87,5 +87,9 @@ public class Controller {
         return _model.getVacationsForPayment(username);
     }
 
+    public String payForVacation(String vacationId, String username, String seller, String price){
+        return _model.payForVacation(vacationId, username, seller, price);
+    }
+
 
 }

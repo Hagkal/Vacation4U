@@ -89,11 +89,33 @@ public class MailView extends ARegisteredView {
     public void setSelectPay (MouseEvent event){
         String entry = confirmationsList.getSelectionModel().getSelectedItem();
         if (entry != null) {
+            String id, username, seller, price;
+            int start = 12;
+            int end = entry.indexOf("Seller");
+            id = entry.substring(start, end - 1);
+            entry = entry.substring(end);
+            start = 8 + entry.indexOf("Seller");
+            end = entry.indexOf("Date");
+            seller = entry.substring(start, end - 1);
+            entry = entry.substring(end);
+            start = 7 + entry.indexOf("Price");
+            end = entry.length();
+            price = entry.substring(start, end);
+
             try {
                 Stage pStage = new Stage();
                 FXMLLoader fxml = new FXMLLoader(getClass().getResource("/fxmls/paymentXML.fxml"));
                 pStage.setTitle("Vacation4U");
                 Parent root = fxml.load();
+
+                PaymentView v = fxml.getController();
+                v.set_controller(_controller);
+                v._loggedUser = _loggedUser;
+                v._manager = _manager;
+                v._price = price;
+                v._id = id;
+                v._seller = seller;
+
                 pStage.setScene(new Scene(root, 900, 600));
                 pStage.setResizable(false);
                 pStage.show();
