@@ -515,7 +515,7 @@ public class Model {
             pst2.executeUpdate();
             pstSold.executeUpdate();
 
-            return "Payed success";
+            return "Payment received!\nEnjoy your vacation!";
 
         }
         catch (SQLException e){
@@ -566,15 +566,5 @@ public class Model {
             System.out.println(e.getMessage());
             return null;
         }
-    }
-
-
-
-
-    public static void main(String[] args){
-        Model m = new Model();
-
-
-        ArrayList<Vacation> v = m.getMyVacations("tt");
     }
 }

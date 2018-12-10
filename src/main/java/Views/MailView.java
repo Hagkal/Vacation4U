@@ -76,7 +76,7 @@ public class MailView extends ARegisteredView {
             String buyer = entry.substring(start, end - 1);
 
             String response = _controller.approveVacation(_loggedUser, id, buyer);
-            if (response.contains("Approved"))
+            if (response.contains("approved"))
                 popInfo(response);
             else if (response.contains("error"))
                 popProblem(response);
