@@ -301,7 +301,7 @@ public class Model {
 
         String sql = "UPDATE pendingVacations " +
                 "SET status = ? " +
-                "WHERE VacationId = ?";
+                "WHERE VacationId = ? AND potentialBuyerName = ?";
 
         try (
                 Connection conn = this.make_connection();
@@ -310,11 +310,12 @@ public class Model {
 
             pstmt.setString(1, "payment");
             pstmt.setInt(2, Integer.valueOf(vacationId));
+            pstmt.setString(3, vacationBuyer);
 
             pstmt.executeUpdate();
 
 
-            return "Approved buyer!\n Waiting for payment";
+            return "Buyer approved!\nPlease wait for " + vacationBuyer + " to pay";
         } catch (SQLException e) {
             System.out.println("something bad happened while trying to update pendingVacations table :(");
             System.out.println(e.getMessage());
@@ -370,7 +371,6 @@ public class Model {
      */
     public String bidVacation(String sellerName, String bidderUsername, String vacationId, String price) {
 
-
         String sql1 = "UPDATE Vacations "
                 + "SET Status = 'bid' "
                 + "WHERE VacationId = ?";
@@ -396,7 +396,7 @@ public class Model {
             ps1.executeUpdate();
             ps2.executeUpdate();
 
-            return "Bid success";
+            return "Bid success!\nPlease wait for the seller to respond";
 
         }
         catch (SQLException e){

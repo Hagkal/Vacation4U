@@ -17,13 +17,16 @@ public class MailView extends ARegisteredView {
     public BorderPane bp_authorized;
     public Button btn_authorize = new Button();
     public Button btn_pay = new Button();
-    ListView<String> waitingForAuthorizationList = new ListView<>();
-    ListView<String> confirmationsList = new ListView<>();
+    ListView<String> waitingForAuthorizationList;
+    ListView<String> confirmationsList;
 
     @Override
     public void prepareView(String username, boolean isManager) {
         _loggedUser = username;
         _manager = isManager;
+
+        waitingForAuthorizationList = new ListView<>();
+        confirmationsList = new ListView<>();
 
         ArrayList<VacationRequest> waitingForAuthorization = _controller.getVacationsForApproval(username);
         String buyer, date, id, full, seller, price, tickets;
@@ -75,6 +78,8 @@ public class MailView extends ARegisteredView {
         }
         else
             popProblem("No selection was made");
+
+        prepareView(_loggedUser, _manager);
     }
 
     public void setSelectPay (MouseEvent event){
@@ -96,6 +101,8 @@ public class MailView extends ARegisteredView {
         }
         else
             popProblem("No selection was made");
+
+        prepareView(_loggedUser, _manager);
         
     }
 
