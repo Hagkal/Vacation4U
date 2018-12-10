@@ -100,8 +100,11 @@ public class RegisteredView extends ARegisteredView{
     @Override
     public void prepareView(String username, boolean isManager) {
         this._loggedUser = username;
-        // txt_welcome = new Text("Welcome back " + _loggedUser + "!");
+        lbl_welcome = new Label("Welcome back " + _loggedUser + "!");
+        lbl_welcome.setLayoutX(500);
+        lbl_welcome.setLayoutY(300);
         this._manager = isManager;
+
     }
 
 
