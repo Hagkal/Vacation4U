@@ -58,8 +58,8 @@ public class UpdateView extends ARegisteredView {
         tf_firstName.setDisable(true);
         pf_passwordUpdate.setText("");
         pf_passwordUpdate.setDisable(true);
-        dp_dateUpdate.getEditor().setText("");
-        dp_dateUpdate.setPromptText("");
+
+        dp_dateUpdate.getEditor().clear();
         dp_dateUpdate.setDisable(true);
 
         prepareView(_loggedUser, _manager);
@@ -97,7 +97,8 @@ public class UpdateView extends ARegisteredView {
                tf_lastName.setDisable(false);
                tf_hometown.setDisable(false);
                pf_passwordUpdate.setText(response.get(1));
-               dp_dateUpdate.setPromptText(response.get(2));
+               dp_dateUpdate.setValue(LocalDate.parse(response.get(2)));
+               dp_dateUpdate.getEditor().setText(dp_dateUpdate.getValue().toString());
                tf_firstName.setText(response.get(3));
                tf_lastName.setText(response.get(4));
                tf_hometown.setText(response.get(5));
@@ -134,9 +135,7 @@ public class UpdateView extends ARegisteredView {
         lbl_dateUpdateErr.setVisible(false);
 
         if (!dp_dateUpdate.getEditor().getText().isEmpty())
-            birthday = dp_dateUpdate.getEditor().getText();
-        else if (!dp_dateUpdate.getPromptText().isEmpty())
-            birthday = dp_dateUpdate.getPromptText();
+            birthday = dp_dateUpdate.getValue().toString();
 
         //username check
         if (username.isEmpty()){
@@ -163,7 +162,8 @@ public class UpdateView extends ARegisteredView {
         }
 
         //date check
-        if (dp_dateUpdate.getValue() != null && !isBiggerThen18(dp_dateUpdate)){
+        if (dp_dateUpdate.getValue() != null && !isBiggerThen18(dp_dateUpdate)
+                || birthday.isEmpty()){
             lbl_dateUpdateErr.setVisible(true);
             allChecked = false;
         }
@@ -188,10 +188,9 @@ public class UpdateView extends ARegisteredView {
             }
             else{
                 popInfo("Updated successfully!");
+                update_cancel(new ActionEvent());
             }
         }
-        dp_dateUpdate.setPromptText("");
-        dp_dateUpdate.getEditor().setText("");
     }
 
     /**

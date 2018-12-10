@@ -3,6 +3,7 @@ package Models;
 import Vacations.Vacation;
 import Vacations.VacationPayment;
 import Vacations.VacationRequest;
+import Vacations.VacationSell;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -525,13 +526,55 @@ public class Model {
     }
 
 
+    /**
+     * method to get all vacation purchased by a user
+     * @param username - the user of the purchasing
+     * @return - list of vacations
+     */
+    public ArrayList<Vacation> getMyVacations(String username){
+        String sql = "SELECT * FROM Vacations WHERE VacationId IN ( SELECT VacationId FROM SoldVacations WHERE " +
+                "BuyerName = ? )";
+
+        try (
+                Connection conn = make_connection();
+                PreparedStatement pst = conn.prepareStatement(sql);
+                ){
+
+            pst.setString(1, username);
+
+            m_results = pst.executeQuery();
+
+            ArrayList<Vacation> toReturn = new ArrayList<>();
+            while (m_results.next()){
+                String _id = m_results.getString(1);
+                String _departureDate = m_results.getString(5);
+                String _returnDate = m_results.getString(4);
+                String _price = m_results.getString(8);
+                String _sellingUser = m_results.getString(2);
+                String _destination = m_results.getString(3);
+                String _airline = m_results.getString(6);
+                String _quantity = m_results.getString(7);
+
+                Vacation v = new Vacation(_id, _destination, _departureDate, _returnDate, _price, _quantity, _airline);
+                v._sellingUser = _sellingUser;
+                toReturn.add(v);
+            }
+
+            return toReturn;
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+
 
 
     public static void main(String[] args){
         Model m = new Model();
 
-      //  m.bidVacation("gg", "tt", "2", "26");
-        //m.approveVacation("tt", "5", "gg");
-        m.payForVacation("5", "gg", "tt", "50", "Visa");
+
+        ArrayList<Vacation> v = m.getMyVacations("tt");
     }
 }
