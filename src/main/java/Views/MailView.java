@@ -22,6 +22,9 @@ public class MailView extends ARegisteredView {
 
     @Override
     public void prepareView(String username, boolean isManager) {
+        _loggedUser = username;
+        _manager = isManager;
+
         ArrayList<VacationRequest> waitingForAuthorization = _controller.getVacationsForApproval(username);
         String buyer, date, id, full, seller, price, tickets;
         for (VacationRequest v: waitingForAuthorization) {
@@ -40,10 +43,10 @@ public class MailView extends ARegisteredView {
         vacationsToPay.add(new VacationApprove("6", "omri", "12/3/2018", "250$"));
         for (VacationApprove v: vacationsToPay) {
             id = v._vID;
-            buyer = v._buyer;
+            seller = v._seller;
             date = v._date;
             price = v._price;
-            full = "VacationID: " + id + "\t" + "Buyer: " + buyer + "\t" + "Date: " + date + "\t" + "Price: " + price;
+            full = "VacationID: " + id + "\t" + "Seller: " + seller + "\t" + "Date: " + date + "\t" + "Price: " + price;
             confirmationsList.getItems().add(full);
         }
         confirmationsList.setPrefHeight(150);
