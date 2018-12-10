@@ -65,12 +65,14 @@ public class VacationsTableView extends ARegisteredView{
             end = entry.length();
             selectedVacationDetails[2] = entry.substring(start + 7, end);//price
             selectedVacationDetails[3] = _loggedUser;//logged user
-
+          
             String response = _controller.bidVacation(selectedVacationDetails[1], selectedVacationDetails[3], selectedVacationDetails[0], selectedVacationDetails[2]);
             if (response.equals("Bid success"))
                 popInfo(response);
             else if (response.equals("error"))
+
                 popProblem(response);
+
         }
         else
             popProblem("No selection was made");

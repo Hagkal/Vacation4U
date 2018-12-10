@@ -296,8 +296,6 @@ public class Model {
                 "SET status = ? " +
                 "WHERE VacationId = ?";
 
-        String sql2 = "SELECT * FROM pendingVacations WHERE VacationId = ?";
-
         try (
                 Connection conn = this.make_connection();
                 PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -401,8 +399,8 @@ public class Model {
 
     /**
      *
-     * @param username
-     * @return
+     * @param username - the username of which to get the status
+     * @return - list of vacations for payment
      */
     public ArrayList<VacationApprove> getVacationsForPayment(String username){
         String sql = "SELECT * FROM pendingVacations WHERE potentialBuyerName = ? AND " +
@@ -416,13 +414,18 @@ public class Model {
             pstm.setString(1, username);
             m_results = pstm.executeQuery();
 
+            ArrayList<VacationApprove> forPayment = new ArrayList<>();
             while (m_results.next()){
                 String vID = m_results.getString(1);
                 String sellerName = m_results.getString(3);
+                String date = m_results.getString(4);
+                String price = m_results.getString(5);
+
+                forPayment.add(new VacationApprove(vID,sellerName,date, price));
 
             }
 
-            return null;
+            return forPayment;
         }
         catch (SQLException e){
             System.out.println("something bad happened while retrieving data from pendingVacations");
@@ -432,12 +435,40 @@ public class Model {
     }
 
 
+    public String payForVacation(String vacationId, String username){
+        String sql = "DELETE FROM pendingVacations WHERE VacationId = ? AND potentialBuyerName = ?";
+        String sql2 = "UPDATE Vacations SET Status = 'sold'";
+
+        try (
+                Connection conn = make_connection();
+                PreparedStatement pst1 = conn.prepareStatement(sql);
+                PreparedStatement pst2 = conn.prepareStatement(sql2);
+                ){
+
+            pst1.setInt(1, Integer.valueOf(vacationId));
+            pst1.setString(2, username);
+
+            pst1.executeUpdate();
+            pst2.executeUpdate();
+
+            return "Payed success";
+
+        }
+        catch (SQLException e){
+            System.out.println("something bad happened while updating payment");
+            System.out.println(e.getMessage());
+            return "error";
+        }
+    }
+
+
 
 
     public static void main(String[] args){
         Model m = new Model();
 
-        m.bidVacation("gg", "tt", "2", "26");
-      // m.approveVacation("gg", "2", "tt");
+      //  m.bidVacation("gg", "tt", "2", "26");
+        //m.approveVacation("tt", "5", "gg");
+        m.payForVacation("5", "gg");
     }
 }
