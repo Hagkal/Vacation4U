@@ -7,6 +7,10 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -37,20 +41,47 @@ public class Main extends Application {
         // receiving fxml loader and setting primary node
         FXMLLoader loader = new FXMLLoader();
         String fxmlFile = "/fxmls/UnRegistered.fxml";
-        Parent root = loader.load(getClass().getResourceAsStream(fxmlFile));
+        //Parent root = loader.load(getClass().getResourceAsStream(fxmlFile));
+
+
+        FXMLLoader fxml = new FXMLLoader(getClass().getResource("/fxmls/Unregistered.fxml"));
+        primaryStage.setTitle("Vacation4U");
+
+        Canvas canvas = new Canvas(700, 500);
+
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        String ams = getClass().getResource("/Pics/ams.jpg").toString();
+        Image amsIM = new Image(ams);
+        gc.drawImage(amsIM, 60, 80, 250, 180);
+
+        String london = getClass().getResource("/Pics/london.jpg").toString();
+        Image londonIM = new Image(london);
+        gc.drawImage(londonIM,410,80,250, 180);
+
+        String paris = getClass().getResource("/Pics/paris.jpg").toString();
+        Image parisIM = new Image(paris);
+        gc.drawImage(parisIM,410,335,250, 180);
+
+        String rome = getClass().getResource("/Pics/rome.jpg").toString();
+        Image romeIM = new Image(rome);
+        gc.drawImage(romeIM,60,335,250, 180);
+
+        Pane root = new Pane();
+        root = fxml.load();
+        root.getChildren().add(canvas);
 
 
         // setting up
         Model model = new Model();
         Controller controller = new Controller();
-        AView view = loader.getController();
+        AView view = fxml.getController();
         controller.set_model(model);
         view.set_controller(controller);
 
         // displaying the first presentation
         primaryStage.setTitle("Vacation4U");
-        primaryStage.setScene(new Scene(root, 1400, 700));
-        primaryStage.setResizable(true);
+        primaryStage.setScene(new Scene(root, 900, 600));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
