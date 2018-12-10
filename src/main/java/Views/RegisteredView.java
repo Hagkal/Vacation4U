@@ -4,6 +4,7 @@ import Controllers.Main;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -19,11 +20,10 @@ public class RegisteredView extends ARegisteredView{
     public Button btn_update;
     public Button btn_delete;
     public BorderPane lyt_mainPane;
-    public Text txt_welcome;
     public Button btn_publishVacation;
     public Button btn_mailBox;
     public Button btn_search;
-
+    public Label lbl_welcome;
 
     /**
      * method to set the read interface
@@ -99,8 +99,11 @@ public class RegisteredView extends ARegisteredView{
     @Override
     public void prepareView(String username, boolean isManager) {
         this._loggedUser = username;
-        // txt_welcome = new Text("Welcome back " + _loggedUser + "!");
+        lbl_welcome = new Label("Welcome back " + _loggedUser + "!");
+        lbl_welcome.setLayoutX(500);
+        lbl_welcome.setLayoutY(300);
         this._manager = isManager;
+
     }
 
 
