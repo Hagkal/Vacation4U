@@ -25,6 +25,7 @@ public class RegisteredView extends ARegisteredView{
     public Button btn_search;
     public Label lbl_welcome;
 
+
     /**
      * method to set the read interface
      * @param mouseEvent - click event on the read button
