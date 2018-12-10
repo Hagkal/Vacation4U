@@ -269,7 +269,7 @@ public class Model {
 
             while (m_results.next()) {
                 String vacationId = m_results.getString(1);
-                String buyer = m_results.getString(3);
+                String buyer = m_results.getString(2);
                 String date = m_results.getString(4);
 
                 VacationRequest r = new VacationRequest(buyer, date, vacationId);
