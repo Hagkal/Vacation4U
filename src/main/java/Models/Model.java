@@ -392,7 +392,13 @@ public class Model {
         }
         catch (SQLException e){
             System.out.println("something bad happened while inserting into pendingVacations :(");
-            System.out.println(e.getMessage());
+            System.out.println(e.getMessage() + "\n" + e.getErrorCode());
+
+            if (e.getErrorCode() == 19){
+                return "error! \nYou already placed a bid for that vacation!\nWait patiently for the seller to approve :)";
+            }
+
+
             return "error";
         }
     }
@@ -404,7 +410,7 @@ public class Model {
      */
     public ArrayList<VacationApprove> getVacationsForPayment(String username){
         String sql = "SELECT * FROM pendingVacations WHERE potentialBuyerName = ? AND " +
-                "status = payment";
+                "status IN ('payment')";
 
         try (
                 Connection conn = make_connection();
