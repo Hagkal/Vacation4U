@@ -73,7 +73,14 @@ public class Controller {
         return _model.approveVacation(username, vacationId, vacationBuyer);
     }
 
-    public ArrayList<Vacation> getAllVacations() {
-        return _model.getAllVacations();
+    public ArrayList<Vacation> getAllVacations(String username) {
+        return _model.getAllVacations(username);
     }
+
+
+    public String bidVacation(String sellerName, String bidderUsername, String vacationId, String price){
+        return _model.bidVacation(sellerName, bidderUsername, vacationId, price);
+    }
+
+
 }

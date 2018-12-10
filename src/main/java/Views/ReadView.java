@@ -55,7 +55,7 @@ public class ReadView extends ARegisteredView {
 
         if (!isManager){
             tf_userNameRead.setText(username);
-            tf_userNameRead.setDisable(true);
+            //tf_userNameRead.setDisable(true);
         }
     }
 }

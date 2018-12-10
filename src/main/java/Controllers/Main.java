@@ -82,6 +82,7 @@ public class Main extends Application {
         primaryStage.setTitle("Vacation4U");
         primaryStage.setScene(new Scene(root, 900, 600));
         primaryStage.setResizable(false);
+
         primaryStage.show();
     }
 

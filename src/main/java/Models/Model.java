@@ -1,9 +1,11 @@
 package Models;
 
 import Vacations.Vacation;
+import Vacations.VacationApprove;
 import Vacations.VacationRequest;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Model {
@@ -290,31 +292,36 @@ public class Model {
      * @return - success or fail
      */
     public String approveVacation(String username, String vacationId, String vacationBuyer) {
-        String sql = "UPDATE pendingVacations\n"
-                + "SET status = approved\n"
-                + "WHERE\n"
-                + "PotentialBuyerName = ? AND "
-                + "VacationId = ?";
+        String sql = "UPDATE pendingVacations " +
+                "SET status = ? " +
+                "WHERE VacationId = ?";
+
+        String sql2 = "SELECT * FROM pendingVacations WHERE VacationId = ?";
 
         try (
                 Connection conn = this.make_connection();
-                PreparedStatement pstmt = conn.prepareStatement(sql)
+                PreparedStatement pstmt = conn.prepareStatement(sql);
         ) {
 
-            pstmt.setString(1, vacationBuyer);
-            pstmt.setString(2, vacationId);
-            pstmt.executeQuery();
+            pstmt.setString(1, "payment");
+            pstmt.setInt(2, Integer.valueOf(vacationId));
 
-            return "Approved buyer!";
+            pstmt.executeUpdate();
+
+
+            return "Approved buyer!\n Waiting for payment";
         } catch (SQLException e) {
-            System.out.println("something bad happaned while trying to update pendingVacations table :(");
+            System.out.println("something bad happened while trying to update pendingVacations table :(");
             System.out.println(e.getMessage());
             return "error while updating the approval";
         }
     }
 
-
-    public ArrayList<Vacation> getAllVacations() {
+    /**
+     * method to retrieve all available vacations
+     * @return - list of available vacations
+     */
+    public ArrayList<Vacation> getAllVacations(String username) {
         String sql = "SELECT * FROM Vacations WHERE Status NOT IN ('sold')";
 
         try (
@@ -347,5 +354,90 @@ public class Model {
             System.out.println(e.getMessage());
             return null;
         }
+    }
+
+    /**
+     * method used to make a bid on a published vacation
+     * @param sellerName - the seller name of that vacation
+     * @param bidderUsername - the username of the bidder
+     * @param vacationId - the vacation id
+     * @return - success or fail
+     */
+    public String bidVacation(String sellerName, String bidderUsername, String vacationId, String price) {
+        String sql1 = "UPDATE Vacations "
+                + "SET Status = 'bid' "
+                + "WHERE VacationId = ?";
+
+        String sql2 = "INSERT INTO pendingVacations (VacationId,SellerName,PotentialBuyerName,bidedAt,Price,Status)"
+                + " VALUES(?,?,?,?,?,?)";
+
+
+        try (
+                Connection conn = make_connection();
+                PreparedStatement ps1 = conn.prepareStatement(sql1);
+                PreparedStatement ps2 = conn.prepareStatement(sql2);
+                ){
+
+            ps1.setInt(1, Integer.valueOf(vacationId));
+            ps2.setInt(1, Integer.valueOf(vacationId));
+            ps2.setString(2, sellerName);
+            ps2.setString(3, bidderUsername);
+            ps2.setString(4, LocalDate.now().toString());
+            ps2.setString(5, price);
+            ps2.setString(6, "waiting");
+
+            ps1.executeUpdate();
+            ps2.executeUpdate();
+
+            return "Bid success";
+
+        }
+        catch (SQLException e){
+            System.out.println("something bad happened while inserting into pendingVacations :(");
+            System.out.println(e.getMessage());
+            return "error";
+        }
+    }
+
+    /**
+     *
+     * @param username
+     * @return
+     */
+    public ArrayList<VacationApprove> getVacationsForPayment(String username){
+        String sql = "SELECT * FROM pendingVacations WHERE potentialBuyerName = ? AND " +
+                "status = payment";
+
+        try (
+                Connection conn = make_connection();
+                PreparedStatement pstm = conn.prepareStatement(sql);
+                ){
+
+            pstm.setString(1, username);
+            m_results = pstm.executeQuery();
+
+            while (m_results.next()){
+                String vID = m_results.getString(1);
+                String sellerName = m_results.getString(3);
+
+            }
+
+            return null;
+        }
+        catch (SQLException e){
+            System.out.println("something bad happened while retrieving data from pendingVacations");
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+
+
+
+    public static void main(String[] args){
+        Model m = new Model();
+
+        m.bidVacation("gg", "tt", "2", "26");
+      // m.approveVacation("gg", "2", "tt");
     }
 }

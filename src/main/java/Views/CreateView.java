@@ -97,13 +97,13 @@ public class CreateView extends AView {
             toSend.add(firstname);
             toSend.add(lastname);
             toSend.add(hometown);
-          /*  String response = _controller.create_user(toSend);
+            String response = _controller.create_user(toSend);
 
             if (response.contains("fail"))
                 popProblem(response);
             else
                 popInfo(response);
-                */
+
         }
 
 
