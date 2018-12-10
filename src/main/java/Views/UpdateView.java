@@ -181,7 +181,14 @@ public class UpdateView extends ARegisteredView {
             toSend.add(firstname);
             toSend.add(lastname);
             toSend.add(hometown);
-            _controller.update_user(username, toSend);
+            String response = _controller.update_user(username, toSend);
+
+            if (response.contains("fail")){
+                popProblem("Failed updating your info");
+            }
+            else{
+                popInfo("Updated successfully!");
+            }
         }
         dp_dateUpdate.setPromptText("");
         dp_dateUpdate.getEditor().setText("");
