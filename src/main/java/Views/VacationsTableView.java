@@ -27,19 +27,21 @@ public class VacationsTableView extends ARegisteredView{
     public void prepareView(String username, boolean isManager) {
 
         ArrayList <Vacation> vacations = _controller.getAllVacations(username);
-        _loggedUser = username;
-        String id, dest, depart, arrive, quant, price, seller, full;
-        for (Vacation v: vacations) {
-            id = v._id;
-            seller = v._sellingUser;
-            dest = v._destination;
-            depart = v._departureDate;
-            arrive = v._returnDate;
-            quant = v._quantity;
-            price = v._price;
-            full = "Vacation ID: " + id + "\t" + "Seller: " + seller + "\t" + "Destination: "  + dest + "\t" + " Departure Date: "  + depart + "\t" +
-                    " Arrival Date: " + arrive + "\t" + " Quantity: "  + quant + "\t" +" Price: " + price;
-            list.getItems().add(full);
+        if (vacations != null) {
+            _loggedUser = username;
+            String id, dest, depart, arrive, quant, price, seller, full;
+            for (Vacation v : vacations) {
+                id = v._id;
+                seller = v._sellingUser;
+                dest = v._destination;
+                depart = v._departureDate;
+                arrive = v._returnDate;
+                quant = v._quantity;
+                price = v._price;
+                full = "Vacation ID: " + id + "\t" + "Seller: " + seller + "\t" + "Destination: " + dest + "\t" + " Departure Date: " + depart + "\t" +
+                        " Arrival Date: " + arrive + "\t" + " Quantity: " + quant + "\t" + " Price: " + price;
+                list.getItems().add(full);
+            }
         }
 
         list.setPrefWidth(800);
@@ -63,13 +65,14 @@ public class VacationsTableView extends ARegisteredView{
             end = entry.length();
             selectedVacationDetails[2] = entry.substring(start + 7, end);//price
             selectedVacationDetails[3] = _loggedUser;//logged user
-            //System.out.println(selectedVacationDetails[0] + "space" + selectedVacationDetails[1] + "space" + selectedVacationDetails[2]
-            //+ "space" + selectedVacationDetails[3]);//TO-DO: pass to controller the ID
+          
             String response = _controller.bidVacation(selectedVacationDetails[1], selectedVacationDetails[3], selectedVacationDetails[0], selectedVacationDetails[2]);
             if (response.equals("Bid success"))
                 popInfo(response);
             else if (response.equals("error"))
-                popProblem("error");
+
+                popProblem(response);
+
         }
         else
             popProblem("No selection was made");
