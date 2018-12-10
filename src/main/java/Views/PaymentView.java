@@ -4,6 +4,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 public class PaymentView extends ARegisteredView {
     public CheckBox cb_visa;
@@ -75,14 +76,11 @@ public class PaymentView extends ARegisteredView {
         if (tf_cardNum.getText().isEmpty() || tf_cardDate.getText().isEmpty() || tf_cardCVV.getText().isEmpty())
             popProblem("Please fill all the details!");
         else {
-            String response = _controller.payForVacation(_id, _loggedUser, _seller, _price);
+            String response = _controller.payForVacation(_id, _loggedUser, _seller, _price, "Visa");
             if (response.contains("Payed")) {
                 popInfo(response);
-                tf_cardNum.setText("");
-                tf_cardDate.setText("");
-                tf_cardCVV.setText("");
-                tf_username.setText("");
-                tf_password.setText("");
+                Stage parent = (Stage) tf_cardCVV.getScene().getWindow();
+                parent.close();
             }
             else if (response.equals("error"))
                 popProblem(response);
@@ -94,14 +92,11 @@ public class PaymentView extends ARegisteredView {
         if (tf_username.getText().isEmpty() || tf_password.getText().isEmpty())
             popProblem("Please fill all the details!");
         else {
-            String response = _controller.payForVacation(_id, _loggedUser, _seller, _price);
+            String response = _controller.payForVacation(_id, _loggedUser, _seller, _price, "Paypal");
             if (response.contains("Payed")) {
                 popInfo(response);
-                tf_cardNum.setText("");
-                tf_cardDate.setText("");
-                tf_cardCVV.setText("");
-                tf_username.setText("");
-                tf_password.setText("");
+                Stage parent = (Stage) tf_cardCVV.getScene().getWindow();
+                parent.close();
             }
             else if (response.equals("error"))
                 popProblem(response);

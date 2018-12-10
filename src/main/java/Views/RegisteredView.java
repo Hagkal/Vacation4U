@@ -24,6 +24,7 @@ public class RegisteredView extends ARegisteredView{
     public Button btn_mailBox;
     public Button btn_search;
     public Label lbl_welcome;
+    public Button btn_purchasedVacations;
 
 
     /**
@@ -164,4 +165,7 @@ public class RegisteredView extends ARegisteredView{
         mouseEvent.consume();
     }
 
+    public void setMyVacations(MouseEvent mouseEvent) {
+        mouseEvent.consume();
+    }
 }

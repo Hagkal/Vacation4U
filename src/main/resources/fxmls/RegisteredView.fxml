@@ -47,6 +47,7 @@
                             <Button fx:id="btn_publishVacation" mnemonicParsing="false" onMouseClicked="#setPublish" text="פרסם חופשה" />
                             <Button fx:id="btn_mailBox" mnemonicParsing="false" onMouseClicked="#setMail" text="תיבת דואר" />
                             <Button fx:id="btn_search" mnemonicParsing="false" onMouseClicked="#setSearch" text="חיפוש חופשות" />
+                            <Button fx:id="btn_purchasedVacations"  layoutX="10.0" layoutY="284.0" mnemonicParsing="false" onMouseClicked="#setMyVacations" text="החופשות שרכשתי" />
                         </children>
                     </VBox>
                 </center>

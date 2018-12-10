@@ -10,6 +10,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -117,17 +118,19 @@ public class MailView extends ARegisteredView {
                 v._seller = seller;
 
                 pStage.setScene(new Scene(root, 900, 600));
+                pStage.initModality(Modality.APPLICATION_MODAL);
+                pStage.showAndWait();
                 pStage.setResizable(false);
-                pStage.show();
             }
-            catch (Exception e){}
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
         }
         else
             popProblem("No selection was made");
 
-        prepareView(_loggedUser, _manager);
-        
 
+        prepareView(_loggedUser, _manager);
     }
 
 

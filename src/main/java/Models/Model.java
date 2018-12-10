@@ -478,7 +478,15 @@ public class Model {
         }
     }
 
-
+    /**
+     * method to set payment for a vacation
+     * @param vacationId - id of a vacation
+     * @param username - the username that payed
+     * @param seller - the seller of the vacatiom
+     * @param price - the price of which the buyer payed
+     * @param payMethod - payment method visa/paypal
+     * @return - success of fail
+     */
     public String payForVacation(String vacationId, String username, String seller, String price, String payMethod){
         String sql = "DELETE FROM pendingVacations WHERE VacationId = ? AND potentialBuyerName = ?";
         String sql2 = "UPDATE Vacations SET Status = 'sold'";
