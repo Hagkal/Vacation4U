@@ -103,6 +103,7 @@ public class RegisteredView extends ARegisteredView{
         this._manager = isManager;
     }
 
+
     public void setPublish(MouseEvent mouseEvent) {
         mouseEvent.consume();
         FXMLLoader loader = new FXMLLoader();
@@ -119,7 +120,10 @@ public class RegisteredView extends ARegisteredView{
         }
     }
 
-
+    /**
+     * this method will present the view for searching vacations
+     * @param mouseEvent
+     */
     public void setSearch(MouseEvent mouseEvent) {
         FXMLLoader loader = new FXMLLoader();
         try {
@@ -132,6 +136,26 @@ public class RegisteredView extends ARegisteredView{
 
         } catch (IOException e) {
             popProblem("Error while trying to load search interface\n" + e.getMessage());
+        }
+        mouseEvent.consume();
+    }
+
+    /**
+     * this method will present the mailbox of the user
+     * @param mouseEvent
+     */
+    public void setMail(MouseEvent mouseEvent) {
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            lyt_mainPane.setCenter(loader.load(getClass().getResourceAsStream("/fxmls/mailXML.fxml")));
+
+            ARegisteredView v = loader.getController();
+            v.set_controller(_controller);
+            v.set_cameFrom(_cameFrom);
+            v.prepareView(_loggedUser, _manager);
+
+        } catch (IOException e) {
+            popProblem("Error while trying to load mail interface\n" + e.getMessage());
         }
         mouseEvent.consume();
     }
