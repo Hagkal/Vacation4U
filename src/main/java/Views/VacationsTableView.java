@@ -31,16 +31,18 @@ public class VacationsTableView extends ARegisteredView{
             _loggedUser = username;
             String id, dest, depart, arrive, quant, price, seller, full;
             for (Vacation v : vacations) {
-                id = v._id;
-                seller = v._sellingUser;
-                dest = v._destination;
-                depart = v._departureDate;
-                arrive = v._returnDate;
-                quant = v._quantity;
-                price = v._price;
-                full = "Vacation ID: " + id + "\t" + "Seller: " + seller + "\t" + "Destination: " + dest + "\t" + " Departure Date: " + depart + "\t" +
-                        " Arrival Date: " + arrive + "\t" + " Quantity: " + quant + "\t" + " Price: " + price;
-                list.getItems().add(full);
+                if (!v._sellingUser.equals(_loggedUser)) {
+                    id = v._id;
+                    seller = v._sellingUser;
+                    dest = v._destination;
+                    depart = v._departureDate;
+                    arrive = v._returnDate;
+                    quant = v._quantity;
+                    price = v._price;
+                    full = "Vacation ID: " + id + "\t" + "Seller: " + seller + "\t" + "Destination: " + dest + "\t" + " Departure Date: " + depart + "\t" +
+                            " Arrival Date: " + arrive + "\t" + " Quantity: " + quant + "\t" + " Price: " + price;
+                    list.getItems().add(full);
+                }
             }
         }
 
