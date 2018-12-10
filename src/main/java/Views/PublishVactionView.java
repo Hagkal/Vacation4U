@@ -6,6 +6,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class PublishVactionView extends ARegisteredView {
@@ -73,6 +74,10 @@ public class PublishVactionView extends ARegisteredView {
         if (dp_departure.getValue() == null ||
                 dp_return.getValue()== null){
             errors.add("Arrival and Departure dates must be filled");
+        }
+        else if (dp_return.getValue().compareTo(LocalDate.now()) < 0 ||
+                dp_departure.getValue().compareTo(LocalDate.now()) < 0){
+            errors.add("Departure and arrival dates cant be in the past!");
         }
         else if (dp_return.getValue().compareTo(dp_departure.getValue()) < 0){
             errors.add("Arrival date must be after departure date");

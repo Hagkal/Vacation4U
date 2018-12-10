@@ -19,7 +19,7 @@ public class MyVacationView extends ARegisteredView {
     @Override
     public void prepareView(String username, boolean isManager) {
 
-        ArrayList<Vacation> vacations = _controller.getAllVacations(username);
+        ArrayList<Vacation> vacations = _controller.getMyVacations(username);
         if (vacations != null) {
             _loggedUser = username;
             String id, dest, depart, arrive, quant, price, seller, full;
