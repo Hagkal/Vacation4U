@@ -166,6 +166,18 @@ public class RegisteredView extends ARegisteredView{
     }
 
     public void setMyVacations(MouseEvent mouseEvent) {
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            lyt_mainPane.setCenter(loader.load(getClass().getResourceAsStream("/fxmls/MyVacations.fxml")));
+
+            ARegisteredView v = loader.getController();
+            v.set_controller(_controller);
+            v.set_cameFrom(_cameFrom);
+            v.prepareView(_loggedUser, _manager);
+
+        } catch (IOException e) {
+            popProblem("Error while trying to load search interface\n" + e.getMessage());
+        }
         mouseEvent.consume();
     }
 }

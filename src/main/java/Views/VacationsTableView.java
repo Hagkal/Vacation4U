@@ -46,7 +46,7 @@ public class VacationsTableView extends ARegisteredView{
             }
         }
 
-        list.setPrefWidth(800);
+        list.setPrefWidth(600);
         list.setPrefHeight(150);
         ap_vacations.getChildren().add(list);
     }
