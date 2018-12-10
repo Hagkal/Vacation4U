@@ -49,22 +49,31 @@ public class VacationsTableView extends ARegisteredView{
 
     public void setSelectVacation (MouseEvent event){
         String entry = list.getSelectionModel().getSelectedItem();
-        int start = entry.indexOf(':');
-        int end = entry.indexOf("Seller");
-        String[] selectedVacationDetails = new String[4];
-        selectedVacationDetails[0] = entry.substring(start + 2, end - 1);//id
-        entry = entry.substring(end);
-        start = entry.indexOf(':');
-        end = entry.indexOf("Destination");
-        selectedVacationDetails[1] = entry.substring(start + 2, end - 1);//seller
-        entry = entry.substring(end);
-        start = entry.indexOf("Price");
-        end = entry.length();
-        selectedVacationDetails[2] = entry.substring(start + 7, end);//price
-        selectedVacationDetails[3] = _loggedUser;//logged user
-        //System.out.println(selectedVacationDetails[0] + "space" + selectedVacationDetails[1] + "space" + selectedVacationDetails[2]
-        //+ "space" + selectedVacationDetails[3]);//TO-DO: pass to controller the ID
-        
+        if (entry != null) {
+            int start = entry.indexOf(':');
+            int end = entry.indexOf("Seller");
+            String[] selectedVacationDetails = new String[4];
+            selectedVacationDetails[0] = entry.substring(start + 2, end - 1);//id
+            entry = entry.substring(end);
+            start = entry.indexOf(':');
+            end = entry.indexOf("Destination");
+            selectedVacationDetails[1] = entry.substring(start + 2, end - 1);//seller
+            entry = entry.substring(end);
+            start = entry.indexOf("Price");
+            end = entry.length();
+            selectedVacationDetails[2] = entry.substring(start + 7, end);//price
+            selectedVacationDetails[3] = _loggedUser;//logged user
+            //System.out.println(selectedVacationDetails[0] + "space" + selectedVacationDetails[1] + "space" + selectedVacationDetails[2]
+            //+ "space" + selectedVacationDetails[3]);//TO-DO: pass to controller the ID
+            String response = _controller.bidVacation(selectedVacationDetails[1], selectedVacationDetails[3], selectedVacationDetails[0], selectedVacationDetails[2]);
+            if (response.equals("Bid success"))
+                popInfo(response);
+            else if (response.equals("error"))
+                popProblem("error");
+        }
+        else
+            popProblem("No selection was made");
+
     }
 
 
