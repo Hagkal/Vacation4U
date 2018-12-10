@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -16,6 +17,7 @@ public class unRegisterView extends AView {
     @FXML
     public Button btn_exit;
     public Button btn_login;
+
 
     /**
      * method to exit the program
@@ -40,7 +42,7 @@ public class unRegisterView extends AView {
             loginView.set_controller(_controller);
             loginView.set_cameFrom(Main.pStage.getScene());
 
-            Main.pStage.setScene(new Scene(root, 800, 400));
+            Main.pStage.setScene(new Scene(root, 900, 600));
             Main.pStage.show();
 
             mouseEvent.consume();
@@ -49,6 +51,27 @@ public class unRegisterView extends AView {
             System.out.println("Something bad happened while trying to move to login screen :(");
             System.out.println(e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    public void setVacationsUnRegistered(MouseEvent mouseEvent){
+        try {
+            Stage pStage = new Stage();
+            FXMLLoader fxml = new FXMLLoader(getClass().getResource("/fxmls/tableXML.fxml"));
+            pStage.setTitle("Vacation4U");
+            Parent root = fxml.load();
+
+            VacationsTableView v = fxml.getController();
+            v.set_controller(_controller);
+            v.prepareView(null, false);
+
+            pStage.setScene(new Scene(root, 700, 300));
+            pStage.initModality(Modality.APPLICATION_MODAL);
+            pStage.showAndWait();
+            pStage.setResizable(false);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
         }
     }
 }

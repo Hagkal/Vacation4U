@@ -49,7 +49,7 @@
             <Button fx:id="btn_authorize" mnemonicParsing="false" onMouseClicked="#setSelectApprove" text="אשר חופשה" BorderPane.alignment="CENTER" />
          </left>
          <center>
-            <Pane prefHeight="163.0" prefWidth="496.0" BorderPane.alignment="CENTER" />
+            <Pane prefHeight="163.0" prefWidth="461.0" BorderPane.alignment="CENTER" />
          </center>
          <right>
             <Pane prefHeight="163.0" prefWidth="20.0" BorderPane.alignment="CENTER" />
