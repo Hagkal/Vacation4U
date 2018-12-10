@@ -78,7 +78,9 @@ public class Controller {
     }
 
 
-    public String bidVacation(String sellerName, String bidderUsername, String vacationId){
-        return _model.bidVacation(sellerName, bidderUsername, vacationId);
+    public String bidVacation(String sellerName, String bidderUsername, String vacationId, String price){
+        return _model.bidVacation(sellerName, bidderUsername, vacationId, price);
     }
+
+
 }

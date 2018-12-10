@@ -1,6 +1,7 @@
 package Models;
 
 import Vacations.Vacation;
+import Vacations.VacationApprove;
 import Vacations.VacationRequest;
 
 import java.sql.*;
@@ -362,13 +363,13 @@ public class Model {
      * @param vacationId - the vacation id
      * @return - success or fail
      */
-    public String bidVacation(String sellerName, String bidderUsername, String vacationId) {
+    public String bidVacation(String sellerName, String bidderUsername, String vacationId, String price) {
         String sql1 = "UPDATE Vacations "
                 + "SET Status = 'bid' "
                 + "WHERE VacationId = ?";
 
-        String sql2 = "INSERT INTO pendingVacations (VacationId,SellerName,PotentialBuyerName,bidedAt,Status)"
-                + " VALUES(?,?,?,?,?)";
+        String sql2 = "INSERT INTO pendingVacations (VacationId,SellerName,PotentialBuyerName,bidedAt,Price,Status)"
+                + " VALUES(?,?,?,?,?,?)";
 
 
         try (
@@ -382,7 +383,8 @@ public class Model {
             ps2.setString(2, sellerName);
             ps2.setString(3, bidderUsername);
             ps2.setString(4, LocalDate.now().toString());
-            ps2.setString(5, "waiting");
+            ps2.setString(5, price);
+            ps2.setString(6, "waiting");
 
             ps1.executeUpdate();
             ps2.executeUpdate();
@@ -397,13 +399,45 @@ public class Model {
         }
     }
 
+    /**
+     *
+     * @param username
+     * @return
+     */
+    public ArrayList<VacationApprove> getVacationsForPayment(String username){
+        String sql = "SELECT * FROM pendingVacations WHERE potentialBuyerName = ? AND " +
+                "status = payment";
+
+        try (
+                Connection conn = make_connection();
+                PreparedStatement pstm = conn.prepareStatement(sql);
+                ){
+
+            pstm.setString(1, username);
+            m_results = pstm.executeQuery();
+
+            while (m_results.next()){
+                String vID = m_results.getString(1);
+                String sellerName = m_results.getString(3);
+
+            }
+
+            return null;
+        }
+        catch (SQLException e){
+            System.out.println("something bad happened while retrieving data from pendingVacations");
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
 
 
 
     public static void main(String[] args){
         Model m = new Model();
 
-        m.bidVacation("gg", "tt", "2");
+        m.bidVacation("gg", "tt", "2", "26");
       // m.approveVacation("gg", "2", "tt");
     }
 }

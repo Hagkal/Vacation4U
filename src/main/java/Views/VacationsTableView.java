@@ -25,7 +25,7 @@ public class VacationsTableView extends ARegisteredView{
 
     @Override
     public void prepareView(String username, boolean isManager) {
-        ArrayList <Vacation> vacations = _controller.getAllVacations();
+        ArrayList <Vacation> vacations = _controller.getAllVacations(username);
 
         String id, dest, depart, arrive, quant, price, full;
         for (Vacation v: vacations) {
