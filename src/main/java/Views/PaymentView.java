@@ -80,12 +80,12 @@ public class PaymentView extends ARegisteredView {
             popProblem("Please fill valid details!");
         else {
             String response = _controller.payForVacation(_id, _loggedUser, _seller, _price, "Visa");
-            if (response.contains("Payed")) {
+            if (response.contains("vacation")) {
                 popInfo(response);
                 Stage parent = (Stage) tf_cardCVV.getScene().getWindow();
                 parent.close();
             }
-            else if (response.equals("error"))
+            else
                 popProblem(response);
         }
 
@@ -96,12 +96,12 @@ public class PaymentView extends ARegisteredView {
             popProblem("Please fill all the details!");
         else {
             String response = _controller.payForVacation(_id, _loggedUser, _seller, _price, "Paypal");
-            if (response.contains("Payed")) {
+            if (response.contains("vacation")) {
                 popInfo(response);
                 Stage parent = (Stage) tf_cardCVV.getScene().getWindow();
                 parent.close();
             }
-            else if (response.equals("error"))
+            else
                 popProblem(response);
         }
     }

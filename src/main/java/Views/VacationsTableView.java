@@ -86,7 +86,7 @@ public class VacationsTableView extends ARegisteredView{
                 popProblem("No selection was made");
         }
         else
-            popInfo("Login to purchase!");
+            popProblem("Login to purchase!");
 
     }
 
