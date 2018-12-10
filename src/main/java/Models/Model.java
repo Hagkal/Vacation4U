@@ -479,11 +479,11 @@ public class Model {
     }
 
 
-    public String payForVacation(String vacationId, String username, String seller, String price){
+    public String payForVacation(String vacationId, String username, String seller, String price, String payMethod){
         String sql = "DELETE FROM pendingVacations WHERE VacationId = ? AND potentialBuyerName = ?";
         String sql2 = "UPDATE Vacations SET Status = 'sold'";
-        String sqlInsertSold = "INSERT INTO SoldVacations (VacationId,SellerName,BuyerName,purchaseDate,Price)"
-                +   " VALUES(?,?,?,?,?)";
+        String sqlInsertSold = "INSERT INTO SoldVacations (VacationId,SellerName,BuyerName,purchaseDay,Price,PayMethod)"
+                +   " VALUES(?,?,?,?,?,?)";
 
         try (
                 Connection conn = make_connection();
@@ -500,6 +500,7 @@ public class Model {
             pstSold.setString(3, username);
             pstSold.setString(4, LocalDate.now().toString());
             pstSold.setString(5, price);
+            pstSold.setString(6, payMethod);
 
             pst1.executeUpdate();
             pst2.executeUpdate();
@@ -523,6 +524,6 @@ public class Model {
 
       //  m.bidVacation("gg", "tt", "2", "26");
         //m.approveVacation("tt", "5", "gg");
-        m.payForVacation("5", "gg", "tt", "50");
+        m.payForVacation("5", "gg", "tt", "50", "Visa");
     }
 }
