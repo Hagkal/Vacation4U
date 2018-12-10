@@ -91,6 +91,8 @@ public class LoginView extends AView {
             view._loggedUser = username;
             view._manager = false; /* needs to be changed */
 
+            view.lbl_welcome.setText(String.format("Welcome back, %s !", tf_userName.getText()));
+
             Main.pStage.setScene(new Scene(root, 800, 400));
             Main.pStage.show();
 
