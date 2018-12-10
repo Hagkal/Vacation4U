@@ -36,6 +36,9 @@ public class LoginView extends AView {
             registerView.dp_date.setValue(today.minusYears(18));
             registerView.dp_date.getEditor().setText("Must be over 18 years old");
 
+            tf_userName.clear();
+            pf_password.clear();
+
             Main.pStage.setScene(new Scene(root, 800, 400));
             Main.pStage.show();
 

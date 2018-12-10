@@ -1,7 +1,7 @@
 package Models;
 
 import Vacations.Vacation;
-import Vacations.VacationApprove;
+import Vacations.VacationPayment;
 import Vacations.VacationRequest;
 
 import java.sql.*;
@@ -257,12 +257,15 @@ public class Model {
      * @return - list of vacation requests
      */
     public ArrayList<VacationRequest> getVacationsForApproval(String username) {
-        String sql = "SELECT * FROM pendingVacations WHERE SellerName = ?";
+        String sql = "SELECT * FROM pendingVacations WHERE SellerName = ? "
+                + "AND VacationId NOT IN ( SELECT VacationId FROM pendingVacations WHERE SellerName = ? AND " +
+                "status IN ('payment') )";
 
         try (Connection conn = this.make_connection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, username);
+            pstmt.setString(2, username);
             m_results = pstmt.executeQuery();
 
             ArrayList<VacationRequest> retrieved = new ArrayList<>();
@@ -409,6 +412,12 @@ public class Model {
         }
     }
 
+    /**
+     * checking if a seller already approved someone for a specific vacation
+     * @param sellerName - the seller of the vacation
+     * @param vacationId - id of that vacation
+     * @return - true if already approved someone, false otherwise
+     */
     private boolean check_approved(String sellerName, String vacationId) {
 
         String sql = "SELECT * FROM pendingVacations WHERE SellerName = ? AND VacationId = ? AND status IN('payment')";
@@ -427,7 +436,7 @@ public class Model {
         }
         catch (SQLException e){
             System.out.println(e.getMessage());
-            return false;
+            return true;
         }
     }
 
@@ -437,7 +446,7 @@ public class Model {
      * @param username - the username of which to get the status
      * @return - list of vacations for payment
      */
-    public ArrayList<VacationApprove> getVacationsForPayment(String username){
+    public ArrayList<VacationPayment> getVacationsForPayment(String username){
         String sql = "SELECT * FROM pendingVacations WHERE potentialBuyerName = ? AND " +
                 "status IN ('payment')";
 
@@ -449,14 +458,14 @@ public class Model {
             pstm.setString(1, username);
             m_results = pstm.executeQuery();
 
-            ArrayList<VacationApprove> forPayment = new ArrayList<>();
+            ArrayList<VacationPayment> forPayment = new ArrayList<>();
             while (m_results.next()){
                 String vID = m_results.getString(1);
                 String sellerName = m_results.getString(3);
                 String date = m_results.getString(4);
                 String price = m_results.getString(5);
 
-                forPayment.add(new VacationApprove(vID,sellerName,date, price));
+                forPayment.add(new VacationPayment(vID,sellerName,date, price));
 
             }
 
