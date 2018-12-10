@@ -546,7 +546,7 @@ public class Model {
 
             ArrayList<Vacation> toReturn = new ArrayList<>();
             while (m_results.next()){
-                String _id = m_results.getString(1);
+                String _id = String.valueOf(m_results.getInt(1));
                 String _departureDate = m_results.getString(5);
                 String _returnDate = m_results.getString(4);
                 String _price = m_results.getString(8);
@@ -555,8 +555,8 @@ public class Model {
                 String _airline = m_results.getString(6);
                 String _quantity = m_results.getString(7);
 
-                Vacation v = new Vacation(_id, _destination, _departureDate, _returnDate, _price, _quantity, _airline);
-                v._sellingUser = _sellingUser;
+                Vacation v = new Vacation(_sellingUser, _destination, _departureDate, _returnDate, _price, _quantity, _airline);
+                v._id = _id;
                 toReturn.add(v);
             }
 
