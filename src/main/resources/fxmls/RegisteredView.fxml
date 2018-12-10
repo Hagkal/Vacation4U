@@ -37,17 +37,42 @@
                 <center>
                     <VBox prefHeight="335.0" prefWidth="139.0" BorderPane.alignment="CENTER">
                         <children>
-                            <Button fx:id="btn_read" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#setRead" text="חיפוש משתמש" />
+                            <Button fx:id="btn_read" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#setRead" text="חיפוש משתמש">
+                           <VBox.margin>
+                              <Insets left="5.0" />
+                           </VBox.margin></Button>
                             <Separator layoutX="10.0" layoutY="35.0" prefHeight="23.0" prefWidth="106.0" />
-                            <Button fx:id="btn_update" layoutX="10.0" layoutY="53.0" mnemonicParsing="false" onMouseClicked="#setUpdate" text="עדכון משתמש" />
+                            <Button fx:id="btn_update" layoutX="10.0" layoutY="53.0" mnemonicParsing="false" onMouseClicked="#setUpdate" text="עדכון משתמש">
+                           <VBox.margin>
+                              <Insets left="8.0" />
+                           </VBox.margin></Button>
                             <Separator layoutX="10.0" layoutY="78.0" prefHeight="20.0" prefWidth="106.0" />
-                            <Button fx:id="btn_delete" layoutX="10.0" layoutY="96.0" mnemonicParsing="false" onMouseClicked="#setDelete" text="מחיקת משתמש" />
+                            <Button fx:id="btn_delete" layoutX="10.0" layoutY="96.0" mnemonicParsing="false" onMouseClicked="#setDelete" text="מחיקת משתמש">
+                           <VBox.margin>
+                              <Insets left="3.0" />
+                           </VBox.margin></Button>
                             <Separator layoutX="10.0" layoutY="127.0" prefHeight="20.0" prefWidth="106.0" />
-                            <Button fx:id="btn_exit" layoutX="10.0" layoutY="147.0" mnemonicParsing="false" onMouseClicked="#logOut" text="התנתק" />
-                            <Button fx:id="btn_publishVacation" mnemonicParsing="false" onMouseClicked="#setPublish" text="פרסם חופשה" />
-                            <Button fx:id="btn_mailBox" mnemonicParsing="false" onMouseClicked="#setMail" text="תיבת דואר" />
-                            <Button fx:id="btn_search" mnemonicParsing="false" onMouseClicked="#setSearch" text="חיפוש חופשות" />
-                            <Button fx:id="btn_purchasedVacations"  layoutX="10.0" layoutY="284.0" mnemonicParsing="false" onMouseClicked="#setMyVacations" text="החופשות שרכשתי" />
+                            <Button fx:id="btn_publishVacation" mnemonicParsing="false" onMouseClicked="#setPublish" text="פרסם חופשה">
+                           <VBox.margin>
+                              <Insets left="8.0" />
+                           </VBox.margin></Button>
+                        <Separator layoutX="10.0" layoutY="128.0" prefHeight="20.0" prefWidth="106.0" />
+                            <Button fx:id="btn_search" mnemonicParsing="false" onMouseClicked="#setSearch" text="חיפוש חופשות">
+                           <VBox.margin>
+                              <Insets left="7.0" />
+                           </VBox.margin></Button>
+                        <Separator layoutX="10.0" layoutY="173.0" prefHeight="20.0" prefWidth="106.0" />
+                            <Button fx:id="btn_purchasedVacations" layoutX="10.0" layoutY="284.0" mnemonicParsing="false" onMouseClicked="#setMyVacations" prefHeight="26.0" prefWidth="106.0" text="החופשות שלי" />
+                        <Separator layoutX="10.0" layoutY="219.0" prefHeight="20.0" prefWidth="106.0" />
+                            <Button fx:id="btn_mailBox" mnemonicParsing="false" onMouseClicked="#setMail" text="תיבת דואר">
+                           <VBox.margin>
+                              <Insets left="18.0" />
+                           </VBox.margin></Button>
+                        <Separator layoutX="10.0" layoutY="254.0" prefHeight="20.0" prefWidth="106.0" />
+                            <Button fx:id="btn_exit" alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="147.0" mnemonicParsing="false" onMouseClicked="#logOut" text="התנתק">
+                           <VBox.margin>
+                              <Insets left="23.0" />
+                           </VBox.margin></Button>
                         </children>
                     </VBox>
                 </center>
@@ -67,7 +92,10 @@
                   <Label fx:id="lbl_welcome" prefHeight="50" prefWidth="350.0" text="Label" textFill="#e40a0a">
                      <padding>
                         <Insets left="5.0" />
-                     </padding></Label>
+                     </padding>
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Label>
                     <Label alignment="CENTER" prefHeight="52.0" prefWidth="600.0" text="Vacation4U" textAlignment="CENTER">
                         <font>
                             <Font name="Arial Bold" size="24.0" />

@@ -39,7 +39,7 @@ public class LoginView extends AView {
             tf_userName.clear();
             pf_password.clear();
 
-            Main.pStage.setScene(new Scene(root, 800, 400));
+            Main.pStage.setScene(new Scene(root, 900, 600));
             Main.pStage.show();
 
             mouseEvent.consume();
@@ -95,7 +95,7 @@ public class LoginView extends AView {
 
             view.prepareView(username, false);
           
-            Main.pStage.setScene(new Scene(root, 800, 400));
+            Main.pStage.setScene(new Scene(root, 900, 600));
             Main.pStage.show();
 
             mouseEvent.consume();

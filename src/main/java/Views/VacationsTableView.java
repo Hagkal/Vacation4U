@@ -25,8 +25,10 @@ public class VacationsTableView extends ARegisteredView{
 
     @Override
     public void prepareView(String username, boolean isManager) {
+        ArrayList <Vacation> vacations = _controller.getAllVacations(null);
+        if (username != null)
+            vacations = _controller.getAllVacations(username);
 
-        ArrayList <Vacation> vacations = _controller.getAllVacations(username);
         if (vacations != null) {
             _loggedUser = username;
             String id, dest, depart, arrive, quant, price, seller, full;
@@ -47,40 +49,44 @@ public class VacationsTableView extends ARegisteredView{
         list.setPrefWidth(600);
         list.setPrefHeight(150);
         ap_vacations.getChildren().add(list);
+
     }
 
     public void setSelectVacation (MouseEvent event){
-        String entry = list.getSelectionModel().getSelectedItem();
-        if (entry != null) {
-            int start = entry.indexOf(':');
-            int end = entry.indexOf("Seller");
-            String[] selectedVacationDetails = new String[4];
-            selectedVacationDetails[0] = entry.substring(start + 2, end - 1);//id
-            entry = entry.substring(end);
-            start = entry.indexOf(':');
-            end = entry.indexOf("Destination");
-            selectedVacationDetails[1] = entry.substring(start + 2, end - 1);//seller
-            entry = entry.substring(end);
-            start = entry.indexOf("Price");
-            end = entry.length();
-            selectedVacationDetails[2] = entry.substring(start + 7, end);//price
-            selectedVacationDetails[3] = _loggedUser; //logged user
+        if (_loggedUser != null) {
+            String entry = list.getSelectionModel().getSelectedItem();
+            if (entry != null) {
+                int start = entry.indexOf(':');
+                int end = entry.indexOf("Seller");
+                String[] selectedVacationDetails = new String[4];
+                selectedVacationDetails[0] = entry.substring(start + 2, end - 1);//id
+                entry = entry.substring(end);
+                start = entry.indexOf(':');
+                end = entry.indexOf("Destination");
+                selectedVacationDetails[1] = entry.substring(start + 2, end - 1);//seller
+                entry = entry.substring(end);
+                start = entry.indexOf("Price");
+                end = entry.length();
+                selectedVacationDetails[2] = entry.substring(start + 7, end);//price
+                selectedVacationDetails[3] = _loggedUser; //logged user
 
-            if (selectedVacationDetails[1].equals(_loggedUser)){
-                popProblem("Can't bid on your own vacation!! :P");
-                return;
-            }
-          
-            String response = _controller.bidVacation(selectedVacationDetails[1], selectedVacationDetails[3], selectedVacationDetails[0], selectedVacationDetails[2]);
-            if (response.contains("Bid success"))
-                popInfo(response);
-            else if (response.contains("error"))
+                if (selectedVacationDetails[1].equals(_loggedUser)) {
+                    popProblem("Can't bid on your own vacation!! :P");
+                    return;
+                }
 
-                popProblem(response);
+                String response = _controller.bidVacation(selectedVacationDetails[1], selectedVacationDetails[3], selectedVacationDetails[0], selectedVacationDetails[2]);
+                if (response.contains("Bid success"))
+                    popInfo(response);
+                else if (response.contains("error"))
 
+                    popProblem(response);
+
+            } else
+                popProblem("No selection was made");
         }
         else
-            popProblem("No selection was made");
+            popInfo("Login to purchase!");
 
     }
 
