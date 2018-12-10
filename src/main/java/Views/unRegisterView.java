@@ -40,7 +40,7 @@ public class unRegisterView extends AView {
             loginView.set_controller(_controller);
             loginView.set_cameFrom(Main.pStage.getScene());
 
-            Main.pStage.setScene(new Scene(root, 800, 400));
+            Main.pStage.setScene(new Scene(root, 1400, 700));
             Main.pStage.show();
 
             mouseEvent.consume();
