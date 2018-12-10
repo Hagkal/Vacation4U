@@ -25,17 +25,19 @@ public class VacationsTableView extends ARegisteredView{
 
     @Override
     public void prepareView(String username, boolean isManager) {
-        ArrayList <Vacation> vacations = _controller.getAllVacations(username);
 
-        String id, dest, depart, arrive, quant, price, full;
+        ArrayList <Vacation> vacations = _controller.getAllVacations(username);
+        _loggedUser = username;
+        String id, dest, depart, arrive, quant, price, seller, full;
         for (Vacation v: vacations) {
             id = v._id;
+            seller = v._sellingUser;
             dest = v._destination;
             depart = v._departureDate;
             arrive = v._returnDate;
             quant = v._quantity;
             price = v._price;
-            full = "Vacation ID: " + id + "\t" + "Destination: "  + dest + "\t" + " Departure Date: "  + depart + "\t" +
+            full = "Vacation ID: " + id + "\t" + "Seller: " + seller + "\t" + "Destination: "  + dest + "\t" + " Departure Date: "  + depart + "\t" +
                     " Arrival Date: " + arrive + "\t" + " Quantity: "  + quant + "\t" +" Price: " + price;
             list.getItems().add(full);
         }
@@ -48,8 +50,21 @@ public class VacationsTableView extends ARegisteredView{
     public void setSelectVacation (MouseEvent event){
         String entry = list.getSelectionModel().getSelectedItem();
         int start = entry.indexOf(':');
-        int end = entry.indexOf("Destination");
-        System.out.println(entry.substring(start + 2, end - 1));//TO-DO: pass to controller the ID
+        int end = entry.indexOf("Seller");
+        String[] selectedVacationDetails = new String[4];
+        selectedVacationDetails[0] = entry.substring(start + 2, end - 1);//id
+        entry = entry.substring(end);
+        start = entry.indexOf(':');
+        end = entry.indexOf("Destination");
+        selectedVacationDetails[1] = entry.substring(start + 2, end - 1);//seller
+        entry = entry.substring(end);
+        start = entry.indexOf("Price");
+        end = entry.length();
+        selectedVacationDetails[2] = entry.substring(start + 7, end);//price
+        selectedVacationDetails[3] = _loggedUser;//logged user
+        //System.out.println(selectedVacationDetails[0] + "space" + selectedVacationDetails[1] + "space" + selectedVacationDetails[2]
+        //+ "space" + selectedVacationDetails[3]);//TO-DO: pass to controller the ID
+        
     }
 
 
