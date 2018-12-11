@@ -488,11 +488,11 @@ public class Model {
      * @param payMethod - payment method visa/paypal
      * @return - success of fail
      */
-    public String payForVacation(String vacationId, String username, String seller, String price, String payMethod){
+    public String payForVacation(String vacationId, String username, String seller, String price, String payMethod, int payments){
         String sql = "DELETE FROM pendingVacations WHERE VacationId = ? AND potentialBuyerName = ?";
         String sql2 = "UPDATE Vacations SET Status = 'sold'";
-        String sqlInsertSold = "INSERT INTO SoldVacations (VacationId,SellerName,BuyerName,purchaseDay,Price,PayMethod)"
-                +   " VALUES(?,?,?,?,?,?)";
+        String sqlInsertSold = "INSERT INTO SoldVacations (VacationId,SellerName,BuyerName,purchaseDay,Price,PayMethod, Payments)"
+                +   " VALUES(?,?,?,?,?,?,?)";
 
         try (
                 Connection conn = make_connection();
@@ -510,6 +510,7 @@ public class Model {
             pstSold.setString(4, LocalDate.now().toString());
             pstSold.setString(5, price);
             pstSold.setString(6, payMethod);
+            pstSold.setInt(7, payments);
 
             pst1.executeUpdate();
             pst2.executeUpdate();
