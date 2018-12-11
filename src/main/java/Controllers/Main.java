@@ -65,7 +65,6 @@ public class Main extends Application {
         String rome = getClass().getResource("/Pics/rome.jpg").toString();
         Image romeIM = new Image(rome);
         gc.drawImage(romeIM,60,335,250, 180);
-
         Pane root = new Pane();
         root = fxml.load();
         root.getChildren().add(canvas);
@@ -80,7 +79,9 @@ public class Main extends Application {
 
         // displaying the first presentation
         primaryStage.setTitle("Vacation4U");
-        primaryStage.setScene(new Scene(root, 900, 600));
+        Scene scene = new Scene(root, 900, 600);
+        scene.getStylesheets().add(getClass().getResource("/ViewStyle.css").toExternalForm());
+        primaryStage.setScene(scene);
         primaryStage.setResizable(true);
 
         primaryStage.show();
