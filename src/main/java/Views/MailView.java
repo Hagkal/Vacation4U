@@ -116,6 +116,7 @@ public class MailView extends ARegisteredView {
                 v._price = price;
                 v._id = id;
                 v._seller = seller;
+                v.prepareView(_loggedUser, _manager);
 
                 pStage.setScene(new Scene(root, 900, 600));
                 pStage.initModality(Modality.APPLICATION_MODAL);
