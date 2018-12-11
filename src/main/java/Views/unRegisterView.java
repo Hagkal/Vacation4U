@@ -41,8 +41,9 @@ public class unRegisterView extends AView {
             AView loginView = loader.getController();
             loginView.set_controller(_controller);
             loginView.set_cameFrom(Main.pStage.getScene());
-
-            Main.pStage.setScene(new Scene(root, 900, 600));
+            Scene scene = new Scene(root, 900, 600);
+            scene.getStylesheets().add(getClass().getResource("/ViewStyle.css").toExternalForm());
+            Main.pStage.setScene(scene);
             Main.pStage.show();
 
             mouseEvent.consume();
@@ -64,8 +65,9 @@ public class unRegisterView extends AView {
             VacationsTableView v = fxml.getController();
             v.set_controller(_controller);
             v.prepareView(null, false);
-
-            pStage.setScene(new Scene(root, 700, 300));
+            Scene scene = new Scene(root, 700, 300);
+            scene.getStylesheets().add(getClass().getResource("/ViewStyle.css").toExternalForm());
+            pStage.setScene(scene);
             pStage.initModality(Modality.APPLICATION_MODAL);
             pStage.showAndWait();
             pStage.setResizable(false);

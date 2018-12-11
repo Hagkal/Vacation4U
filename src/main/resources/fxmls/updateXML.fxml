@@ -12,8 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.UpdateView">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.UpdateView">
 
     <children>
 
@@ -33,8 +32,7 @@
                                 <Font size="17.0" />
                             </font></Label>
                         <TextField fx:id="tf_userNameRead" />
-                        <Button fx:id="btn_update_search" mnemonicParsing="false" onMouseClicked="#send_read_update"
-                                prefHeight="32.0" prefWidth="49.0" text="חפש" />
+                        <Button fx:id="btn_update_search" mnemonicParsing="false" onMouseClicked="#send_read_update" prefHeight="32.0" prefWidth="49.0" text="חפש" />
                   <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="151.0" text="אנא הזן שם משתמש" textFill="RED" visible="false" />
                     </children></VBox>
             </right>
@@ -50,8 +48,8 @@
                         <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                             <children>
 
-                                <Label layoutX="10.0" layoutY="10.0" prefHeight="22.0" prefWidth="45.0" text="סיסמא:  " />
-                                <Label layoutX="10.0" layoutY="10.0" prefHeight="62.0" prefWidth="69.0" text="תאריך לידה:  " />
+                                <Label alignment="CENTER_RIGHT" layoutX="10.0" layoutY="10.0" prefHeight="22.0" prefWidth="60.0" text="סיסמא:  " />
+                                <Label alignment="CENTER_RIGHT" layoutX="10.0" layoutY="10.0" prefHeight="62.0" prefWidth="80.0" text="תאריך לידה:  " />
                                 <Label layoutX="10.0" layoutY="10.0" prefHeight="22.0" prefWidth="64.0" text="שם פרטי:  " />
                                 <Label layoutX="10.0" layoutY="27.0" prefHeight="59.0" prefWidth="82.0" text="שם משפחה:  " />
                                 <Label layoutX="10.0" layoutY="44.0" prefHeight="25.0" prefWidth="75.0" text="עיר מגורים:  " />
@@ -77,10 +75,8 @@
                     </left>
                     <bottom>
                         <Pane prefHeight="84.0" prefWidth="424.0" BorderPane.alignment="CENTER">
-                            <Button fx:id="btn_sendUpdate" alignment="CENTER" disable="true" layoutX="160.0" layoutY="2.0" mnemonicParsing="false"
-                                    onMouseClicked="#send_update" prefHeight="25.0" prefWidth="47.0" text="עדכן" />
-                            <Button fx:id="btn_cancel_update" disable="true" mnemonicParsing="false"
-                                    onAction="#update_cancel" text="ביטול" visible="false" />
+                            <Button fx:id="btn_sendUpdate" alignment="CENTER" disable="true" layoutX="160.0" layoutY="2.0" mnemonicParsing="false" onMouseClicked="#send_update" prefHeight="25.0" prefWidth="47.0" text="עדכן" />
+                            <Button fx:id="btn_cancel_update" disable="true" mnemonicParsing="false" onAction="#update_cancel" text="ביטול" visible="false" />
                         </Pane>
                     </bottom>
                 </BorderPane>

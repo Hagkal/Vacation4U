@@ -84,7 +84,7 @@ public class PaymentView extends ARegisteredView {
             popProblem("Please fill valid details!");
         else {
             int PAYMENT_NUMBER = 6; /* to change */
-            String response = _controller.payForVacation(_id, _loggedUser, _seller, _price, "Visa", PAYMENT_NUMBER);
+            String response = _controller.payForVacation(_id, _loggedUser, _seller, _price, "Visa", Integer.valueOf(cb_tash.getSelectionModel().getSelectedItem().toString()));
             if (response.contains("vacation")) {
                 popInfo(response);
                 Stage parent = (Stage) tf_cardCVV.getScene().getWindow();
