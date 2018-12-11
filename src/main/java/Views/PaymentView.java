@@ -79,7 +79,8 @@ public class PaymentView extends ARegisteredView {
         else if (!isNumber(tf_cardNum.getText()) || !isNumber(tf_cardDate.getText()) || !isNumber(tf_cardCVV.getText()))
             popProblem("Please fill valid details!");
         else {
-            String response = _controller.payForVacation(_id, _loggedUser, _seller, _price, "Visa");
+            int PAYMENT_NUMBER = 6; /* to change */
+            String response = _controller.payForVacation(_id, _loggedUser, _seller, _price, "Visa", PAYMENT_NUMBER);
             if (response.contains("vacation")) {
                 popInfo(response);
                 Stage parent = (Stage) tf_cardCVV.getScene().getWindow();
@@ -95,7 +96,7 @@ public class PaymentView extends ARegisteredView {
         if (tf_username.getText().isEmpty() || pf_password.getText().isEmpty())
             popProblem("Please fill all the details!");
         else {
-            String response = _controller.payForVacation(_id, _loggedUser, _seller, _price, "Paypal");
+            String response = _controller.payForVacation(_id, _loggedUser, _seller, _price, "Paypal", 1);
             if (response.contains("vacation")) {
                 popInfo(response);
                 Stage parent = (Stage) tf_cardCVV.getScene().getWindow();
