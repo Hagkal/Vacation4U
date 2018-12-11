@@ -38,8 +38,9 @@ public class LoginView extends AView {
 
             tf_userName.clear();
             pf_password.clear();
-
-            Main.pStage.setScene(new Scene(root, 900, 600));
+            Scene scene = new Scene(root, 900, 600);
+            scene.getStylesheets().add(getClass().getResource("/ViewStyle.css").toExternalForm());
+            Main.pStage.setScene(scene);
             Main.pStage.show();
 
             mouseEvent.consume();
@@ -94,8 +95,9 @@ public class LoginView extends AView {
             view.lbl_welcome.setText(String.format("Welcome back, %s !", tf_userName.getText()));
 
             view.prepareView(username, false);
-          
-            Main.pStage.setScene(new Scene(root, 900, 600));
+            Scene scene = new Scene(root, 900, 600);
+            scene.getStylesheets().add(getClass().getResource("/ViewStyle.css").toExternalForm());
+            Main.pStage.setScene(scene);
             Main.pStage.show();
 
             mouseEvent.consume();
