@@ -2,6 +2,7 @@ package Views;
 
 import Vacations.VacationPayment;
 import Vacations.VacationRequest;
+import Vacations.VacationSell;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -34,7 +35,7 @@ public class MailView extends ARegisteredView {
         confirmationsList = new ListView<>();
 
         ArrayList<VacationRequest> waitingForAuthorization = _controller.getVacationsForApproval(username);
-        String buyer, date, id, full, seller, price, tickets;
+        String buyer, date, id, full, buyer2, price, tickets;
         if (waitingForAuthorization != null) {
             for (VacationRequest v : waitingForAuthorization) {
                 id = v._vacationId;
@@ -48,14 +49,14 @@ public class MailView extends ARegisteredView {
         waitingForAuthorizationList.setPrefHeight(150);
         bp_waiting.setCenter(waitingForAuthorizationList);
 
-        ArrayList<VacationPayment> vacationsToPay = _controller.getVacationsForPayment(username);
+        ArrayList<VacationSell> vacationsToPay = _controller.getVacationForApprovePayment(username);
         if (vacationsToPay != null) {
-            for (VacationPayment v : vacationsToPay) {
-                id = v._vID;
-                seller = v._seller;
-                date = v._date;
-                price = v._price;
-                full = "VacationID: " + id + "\t" + "Seller: " + seller + "\t" + "Date: " + date + "\t" + "Price: " + price;
+            for (VacationSell v : vacationsToPay) {
+                id = v.get_vacationId();
+                buyer2 = v.get_buyer();
+                date = v.get_date();
+                price = v.get_price();
+                full = "VacationID: " + id + "\t" + "Buyer: " + buyer2 + "\t" + "Date: " + date + "\t" + "Price: " + price;
                 confirmationsList.getItems().add(full);
             }
         }
@@ -134,5 +135,38 @@ public class MailView extends ARegisteredView {
         prepareView(_loggedUser, _manager);
     }
 
+
+    public void confirmPayment(MouseEvent mouseEvent){
+        mouseEvent.consume();
+        String entry = confirmationsList.getSelectionModel().getSelectedItem();
+        if (entry != null) {
+            String id, buyer, seller, price;
+            int start = 12;
+            int end = entry.indexOf("Buyer");
+            id = entry.substring(start, end - 1);
+            entry = entry.substring(end);
+            start = 7 + entry.indexOf("Buyer");
+            end = entry.indexOf("Date");
+            buyer = entry.substring(start, end - 1);
+            entry = entry.substring(end);
+            start = 7 + entry.indexOf("Price");
+            end = entry.length();
+            price = entry.substring(start, end);
+            seller = _loggedUser;
+
+            String response = _controller.confirmPayment(id, seller, buyer, price);
+            if (response.toLowerCase().contains("error")){
+                popProblem(response);
+            }
+            else{
+                popInfo(response);
+            }
+        }
+        else{
+            popProblem("No selection was made");
+        }
+
+        prepareView(_loggedUser, _manager);
+    }
 
 }
