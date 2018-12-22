@@ -316,7 +316,7 @@ public class Model {
             pstmt.executeUpdate();
 
 
-            return "Buyer approved!\nPlease wait for " + vacationBuyer + " to pay";
+            return "Buyer approved!\nPlease update us once " + vacationBuyer + " have payed";
         } catch (SQLException e) {
             System.out.println("something bad happened while trying to update pendingVacations table :(");
             System.out.println(e.getMessage());
@@ -401,11 +401,12 @@ public class Model {
 
         }
         catch (SQLException e){
-            System.out.println("something bad happened while inserting into pendingVacations :(");
-            System.out.println(e.getMessage() + "\n" + e.getErrorCode());
-
             if (e.getErrorCode() == 19){
                 return "error! \nYou already placed a bid for that vacation!\nWait patiently for the seller to approve :)";
+            }
+            else{
+                System.out.println("something bad happened while inserting into pendingVacations :(");
+                System.out.println(e.getMessage() + "\n" + e.getErrorCode());
             }
 
 
@@ -444,6 +445,7 @@ public class Model {
 
     /**
      *
+     * NOT IN USE
      * @param username - the username of which to get the status
      * @return - list of vacations for payment
      */
@@ -480,6 +482,44 @@ public class Model {
     }
 
     /**
+     * method to retrieve all vacations needed to confirm pay
+     * @param sellerName - the seller that need to confirm received payment
+     * @return - list of vacation to confirm
+     */
+    public ArrayList<VacationSell> getVacationForApprovePayment(String sellerName){
+        String sql = "SELECT * FROM pendingVacations WHERE SellerName = ? AND " +
+                "status IN ('payment')";
+
+        try (
+                Connection conn = make_connection();
+                PreparedStatement pstm = conn.prepareStatement(sql);
+        ){
+
+            pstm.setString(1, sellerName);
+            m_results = pstm.executeQuery();
+
+            ArrayList<VacationSell> forPayment = new ArrayList<>();
+            while (m_results.next()){
+                String vID = m_results.getString(1);
+                String buyerName = m_results.getString(2);
+                String date = m_results.getString(4);
+                String price = m_results.getString(5);
+
+                forPayment.add(new VacationSell(vID, buyerName, date, price));
+
+            }
+
+            return forPayment;
+        }
+        catch (SQLException e){
+            System.out.println("something bad happened while retrieving data from pendingVacations");
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * NOT IN USE
      * method to set payment for a vacation
      * @param vacationId - id of a vacation
      * @param username - the username that payed
@@ -526,6 +566,51 @@ public class Model {
         }
     }
 
+    /**
+     * method to confirm that payment has been made
+     * @param vacationId - the vacation id
+     * @param seller - the seller of the vacation
+     * @param buyer - the buyer of the vacation
+     * @param price - the price of the vacation
+     * @return - response weather succeeded or failed
+     */
+    public String confirmPayment(String vacationId, String seller, String buyer, String price){
+        String sql = "DELETE FROM pendingVacations WHERE VacationId = ? AND potentialBuyerName = ?";
+        String sql2 = "UPDATE Vacations SET Status = 'sold'";
+        String sqlInsertSold = "INSERT INTO SoldVacations (VacationId,SellerName,BuyerName,purchaseDay,Price,PayMethod, Payments)"
+                +   " VALUES(?,?,?,?,?,?,?)";
+
+        try (
+                Connection conn = make_connection();
+                PreparedStatement pst1 = conn.prepareStatement(sql);
+                PreparedStatement pst2 = conn.prepareStatement(sql2);
+                PreparedStatement pstSold = conn.prepareStatement(sqlInsertSold);
+        ){
+
+            pst1.setInt(1, Integer.valueOf(vacationId));
+            pst1.setString(2, buyer);
+
+            pstSold.setInt(1, Integer.valueOf(vacationId));
+            pstSold.setString(2, seller);
+            pstSold.setString(3, buyer);
+            pstSold.setString(4, LocalDate.now().toString());
+            pstSold.setString(5, price);
+            pstSold.setString(6, "cash");
+            pstSold.setInt(7, 1);
+
+            pst1.executeUpdate();
+            pst2.executeUpdate();
+            pstSold.executeUpdate();
+
+            return "You have received payment!\nThanks letting us know";
+
+        }
+        catch (SQLException e){
+            System.out.println("something bad happened while updating payment");
+            System.out.println(e.getMessage());
+            return "error";
+        }
+    }
 
     /**
      * method to get all vacation purchased by a user
