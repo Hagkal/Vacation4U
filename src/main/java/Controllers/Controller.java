@@ -96,4 +96,11 @@ public class Controller {
         return _model.getMyVacations(username);
     }
 
+    public ArrayList<Vacation> getMyTradeVacations(String username) {
+        return _model.getMyTradeVacations(username);
+    }
+
+    public String bidTrade(String sellerName, String bidderUsername, String vacationId, String price) {
+        return _model.bidTrade(sellerName, bidderUsername, vacationId, price);
+    }
 }

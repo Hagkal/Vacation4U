@@ -4,6 +4,9 @@ import Vacations.Vacation;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
@@ -11,6 +14,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
@@ -18,9 +22,7 @@ import java.util.ArrayList;
 public class VacationsTableView extends ARegisteredView{
 
     @FXML
-    public AnchorPane ap_vacations;
-    public Button ty = new Button();
-    ListView<String> list = new ListView<>();
+    public ListView<String> sellList = new ListView<>();
 
 
     @Override
@@ -42,19 +44,15 @@ public class VacationsTableView extends ARegisteredView{
                     price = v._price;
                     full = "Vacation ID: " + id + "\t" + "Seller: " + seller + "\t" + "Destination: " + dest + "\t" + " Departure Date: " + depart + "\t" +
                             " Arrival Date: " + arrive + "\t" + " Quantity: " + quant + "\t" + " Price: " + price;
-                    list.getItems().add(full);
+                sellList.getItems().add(full);
             }
         }
-
-        list.setPrefWidth(600);
-        list.setPrefHeight(150);
-        ap_vacations.getChildren().add(list);
 
     }
 
     public void setSelectVacation (MouseEvent event){
         if (_loggedUser != null) {
-            String entry = list.getSelectionModel().getSelectedItem();
+            String entry = sellList.getSelectionModel().getSelectedItem();
             if (entry != null) {
                 int start = entry.indexOf(':');
                 int end = entry.indexOf("Seller");
@@ -71,7 +69,7 @@ public class VacationsTableView extends ARegisteredView{
                 selectedVacationDetails[3] = _loggedUser; //logged user
 
                 if (selectedVacationDetails[1].equals(_loggedUser)) {
-                    popProblem("Can't bid on your own vacation!! :P");
+                    popProblem("Can't bid on your own vacation!");
                     return;
                 }
 
@@ -89,6 +87,4 @@ public class VacationsTableView extends ARegisteredView{
             popProblem("Login to purchase!");
 
     }
-
-
 }

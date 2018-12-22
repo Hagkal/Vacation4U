@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.effect.Reflection;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -18,13 +19,15 @@ public class MyVacationView extends ARegisteredView {
 
     @FXML
     public AnchorPane ap_vacations;
-    ListView<String> list = new ListView<>();
+    public ListView<String> myList = new ListView<>();
 
 
     @Override
     public void prepareView(String username, boolean isManager) {
 
         ArrayList<Vacation> vacations = _controller.getMyVacations(username);
+        ArrayList<Vacation> vacationsForTrade = _controller.getMyTradeVacations(username);
+
         if (vacations != null) {
             _loggedUser = username;
             String id, dest, depart, arrive, quant, price, seller, full;
@@ -39,14 +42,9 @@ public class MyVacationView extends ARegisteredView {
                     price = v._price;
                     full = "Vacation ID: " + id + "\t" + "Seller: " + seller + "\t" + "Destination: " + dest + "\t" + " Departure Date: " + depart + "\t" +
                             " Arrival Date: " + arrive + "\t" + " Quantity: " + quant + "\t" + " Price: " + price;
-                    list.getItems().add(full);
+                    myList.getItems().add(full);
                 }
             }
         }
-
-        list.setPrefWidth(600);
-        list.setPrefHeight(150);
-        ap_vacations.getChildren().add(list);
     }
-
 }
