@@ -18,7 +18,6 @@ public class MyVacationView extends ARegisteredView {
 
 
     @FXML
-    public AnchorPane ap_vacations;
     public ListView<String> myList = new ListView<>();
 
 
@@ -26,11 +25,10 @@ public class MyVacationView extends ARegisteredView {
     public void prepareView(String username, boolean isManager) {
 
         ArrayList<Vacation> vacations = _controller.getMyVacations(username);
-        ArrayList<Vacation> vacationsForTrade = _controller.getMyTradeVacations(username);
 
         if (vacations != null) {
             _loggedUser = username;
-            String id, dest, depart, arrive, quant, price, seller, full;
+            String id, dest, depart, arrive, quant, price, seller, full, trade;
             for (Vacation v : vacations) {
                 if (!v._sellingUser.equals(_loggedUser)) {
                     id = v._id;
@@ -40,8 +38,9 @@ public class MyVacationView extends ARegisteredView {
                     arrive = v._returnDate;
                     quant = v._quantity;
                     price = v._price;
+                    trade = v._forTrade;
                     full = "Vacation ID: " + id + "\t" + "Seller: " + seller + "\t" + "Destination: " + dest + "\t" + " Departure Date: " + depart + "\t" +
-                            " Arrival Date: " + arrive + "\t" + " Quantity: " + quant + "\t" + " Price: " + price;
+                            " Arrival Date: " + arrive + "\t" + " Quantity: " + quant + "\t" + " Price: " + price + "\t" + " For Trade: " + trade;
                     myList.getItems().add(full);
                 }
             }
