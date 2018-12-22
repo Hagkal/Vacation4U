@@ -10,9 +10,9 @@ public class Vacation {
     public String _price;
     public String _sellingUser;
     public String _destination;
-    public String _onlyForFlight;
     public String _airline;
     public String _quantity;
+    public String _forTrade;
 
     /** Vacations type constructor
      * @param destination vacation destination

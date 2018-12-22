@@ -4,6 +4,7 @@ import Models.Model;
 import Vacations.Vacation;
 import Vacations.VacationPayment;
 import Vacations.VacationRequest;
+import Vacations.VacationSell;
 
 import java.util.ArrayList;
 
@@ -87,6 +88,7 @@ public class Controller {
         return _model.getVacationsForPayment(username);
     }
 
+    /* not in use */
     public String payForVacation(String vacationId, String username, String seller, String price, String method, int payments){
         return _model.payForVacation(vacationId, username, seller, price, method, payments);
     }
@@ -96,11 +98,15 @@ public class Controller {
         return _model.getMyVacations(username);
     }
 
-    public ArrayList<Vacation> getMyTradeVacations(String username) {
-        return _model.getMyTradeVacations(username);
-    }
-
     public String bidTrade(String sellerName, String bidderUsername, String vacationId, String price) {
         return _model.bidTrade(sellerName, bidderUsername, vacationId, price);
+    }
+
+    public ArrayList<VacationSell> getVacationForApprovePayment(String seller){
+        return _model.getVacationForApprovePayment(seller);
+    }
+
+    public String confirmPayment(String vacationId, String seller, String buyer, String price){
+        return _model.confirmPayment(vacationId, seller, buyer, price);
     }
 }

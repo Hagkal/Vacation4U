@@ -35,7 +35,7 @@
                   </Pane>
                </top>
                <left>
-                  <Button mnemonicParsing="false" onMouseClicked="#setSelectPay" text="שלם עבור החופשה" BorderPane.alignment="CENTER" />
+                  <Button mnemonicParsing="false" onMouseClicked="#confirmPayment" text="אשר תשלום" BorderPane.alignment="CENTER" />
                </left>
                <center>
                   <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
