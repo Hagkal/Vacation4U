@@ -98,6 +98,9 @@ public class Controller {
         return _model.getMyVacations(username);
     }
 
+    public String bidTrade(String sellerName, String bidderUsername, String vacationId, String price) {
+        return _model.bidTrade(sellerName, bidderUsername, vacationId, price);
+    }
 
     public ArrayList<VacationSell> getVacationForApprovePayment(String seller){
         return _model.getVacationForApprovePayment(seller);
@@ -106,5 +109,4 @@ public class Controller {
     public String confirmPayment(String vacationId, String seller, String buyer, String price){
         return _model.confirmPayment(vacationId, seller, buyer, price);
     }
-
 }
