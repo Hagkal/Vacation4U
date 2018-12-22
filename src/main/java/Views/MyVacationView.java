@@ -26,7 +26,6 @@ public class MyVacationView extends ARegisteredView {
     public void prepareView(String username, boolean isManager) {
 
         ArrayList<Vacation> vacations = _controller.getMyVacations(username);
-        ArrayList<Vacation> vacationsForTrade = _controller.getMyTradeVacations(username);
 
         if (vacations != null) {
             _loggedUser = username;

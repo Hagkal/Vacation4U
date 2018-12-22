@@ -228,7 +228,7 @@ public class Model {
      */
     public String publishVacation(Vacation toPublish) {
 
-        String sql = "INSERT INTO Vacations (SellerName,Destination,ArrivalDate,DepartureDate,Airline,TicketAmount,Price,FlightOnly,Status)"
+        String sql = "INSERT INTO Vacations (SellerName,Destination,ArrivalDate,DepartureDate,Airline,TicketAmount,Price,Tradable,Status)"
                 + " VALUES(?,?,?,?,?,?,?,?,?)";
 
         try (Connection conn = this.make_connection();
@@ -240,7 +240,7 @@ public class Model {
             pstmt.setString(5, toPublish._airline);
             pstmt.setString(6, toPublish._quantity);
             pstmt.setString(7, toPublish._price);
-            pstmt.setString(8, "true");
+            pstmt.setString(8, toPublish._forTrade);
             pstmt.setString(9, "Published");
             pstmt.executeUpdate();
 
