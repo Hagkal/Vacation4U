@@ -653,4 +653,12 @@ public class Model {
             return null;
         }
     }
+
+    public ArrayList<Vacation> getMyTradeVacations(String username) {
+        return null;
+    }
+
+    public String bidTrade(String sellerName, String bidderUsername, String vacationId, String price) {
+        return null;
+    }
 }
