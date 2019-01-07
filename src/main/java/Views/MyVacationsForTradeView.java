@@ -51,7 +51,7 @@ public class MyVacationsForTradeView extends ARegisteredView {
         String entry = ls_tradeList.getSelectionModel().getSelectedItem();
         int start = entry.indexOf(":");
         int end = entry.indexOf("Seller");
-        _bidFor.set_VID2(entry.substring(start+2, end).trim());
+        _bidFor.set_vID2(entry.substring(start+2, end).trim());
 
         _bidFor.set_user2(_loggedUser.get_userName());
 

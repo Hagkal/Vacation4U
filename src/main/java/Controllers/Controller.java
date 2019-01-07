@@ -5,6 +5,8 @@ import Users.User;
 import Vacations.*;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class Controller {
 
@@ -110,5 +112,13 @@ public class Controller {
 
     public ArrayList<Vacation> getMyVacationsForTrade (String username){
         return _model.getMyVacationForTrade(username);
+    }
+
+    public Map<String, List<Vacation>> vacationsTradesForApprove(String username){
+        return _model.vacationsTradesForApprove(username);
+    }
+
+    public String approveTrade(VacationTrade vTrade){
+        return _model.approveTrade(vTrade);
     }
 }

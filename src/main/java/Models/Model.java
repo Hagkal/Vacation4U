@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.function.BiConsumer;
 
 public class Model {
     //Const
@@ -587,7 +588,7 @@ public class Model {
      */
     public String confirmPayment(String vacationId, String seller, String buyer, String price){
         String sql = "DELETE FROM pendingVacations WHERE VacationId = ? AND potentialBuyerName = ?";
-        String sql2 = "UPDATE Vacations SET Status = 'sold' WHERE VacationId = ?"; /* why there is no where clause here ?? */
+        String sql2 = "UPDATE Vacations SET Status = 'sold' WHERE VacationId = ?";
         String sqlInsertSold = "INSERT INTO SoldVacations (VacationId,SellerName,BuyerName,purchaseDay,Price,PayMethod, Payments)"
                 +   " VALUES(?,?,?,?,?,?,?)";
 
@@ -759,16 +760,23 @@ public class Model {
 
         String sql = "INSERT INTO Trades (vID1,user1,vID2,user2)"
                 +   " VALUES(?,?,?,?)";
+        //String updateSQL = "UPDATE Vacations SET SellerName = ? WHERE VacationId = ?";
 
         try (Connection conn = this.make_connection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             //PreparedStatement update = conn.prepareStatement(updateSQL)
+             ) {
 
             pstmt.setInt(1, Integer.valueOf(vTrade.get_vID1()));
             pstmt.setString(2, vTrade.get_user1());
-            pstmt.setInt(3, Integer.valueOf(vTrade.get_VID2()));
+            pstmt.setInt(3, Integer.valueOf(vTrade.get_vID2()));
             pstmt.setString(4, vTrade.get_user2());
 
+//            update.setString(1, vTrade.get_user2());
+//            update.setInt(2 ,vTrade.getIntID2());
+
             pstmt.executeUpdate();
+//            update.executeUpdate();
 
             return "ok";
         } catch (SQLException e) {
@@ -788,7 +796,7 @@ public class Model {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, Integer.valueOf(vTrade.get_vID1()));
-            pstmt.setInt(2, Integer.valueOf(vTrade.get_VID2()));
+            pstmt.setInt(2, Integer.valueOf(vTrade.get_vID2()));
 
             m_results = pstmt.executeQuery();
 
@@ -797,6 +805,12 @@ public class Model {
 
     }
 
+    /**
+     * method to get all mappings of vacation to it's trade offers
+     * in order to approve one of them
+     * @param username - the user needs to approve
+     * @return - mapping of vacation and it's trade offers
+     */
     public Map<String, List<Vacation>> vacationsTradesForApprove(String username){
         TreeMap<String, List<Vacation>> toReturn = new TreeMap<>();
         ArrayList<VacationTrade> trades = null;
@@ -812,7 +826,7 @@ public class Model {
         for (VacationTrade vTrade :
                 trades){
             List<Vacation> list = toReturn.computeIfAbsent(vTrade.get_vID1(), k -> new ArrayList<>());
-            Vacation offer = getVacation(vTrade.get_VID2());
+            Vacation offer = getVacation(vTrade.get_vID2());
             if (offer != null){
                 list.add(offer);
             }
@@ -880,7 +894,7 @@ public class Model {
                 VacationTrade v = new VacationTrade();
                 v.set_vID1(m_results.getString(2));
                 v.set_user1(m_results.getString(3));
-                v.set_VID2(m_results.getString(4));
+                v.set_vID2(m_results.getString(4));
                 v.set_user2(m_results.getString(5));
 
                 vacationTrades.add(v);
@@ -890,12 +904,91 @@ public class Model {
         }
     }
 
+    /**
+     * method used to approve trade between users
+     * @param vTrade - the trade to approve
+     * @return - string representation of status: success == ok, fail == otherwise
+     */
+    public String approveTrade(VacationTrade vTrade){
+        /*
+        1. set both vacations as sold
+        2. insert both vacations into sold vacations table
+        3. delete both vacations from trades
+         */
+        String updateSQL = "UPDATE Vacations SET Status = 'sold' WHERE VacationId = ? OR VacationId = ?";
+        String insertSQL1 = "INSERT INTO SoldVacations (VacationId,SellerName,BuyerName,purchaseDay,Price,PayMethod, Payments)"
+                +   " VALUES(?,?,?,?,?,?,?)";
+        String insertSQL2 = "INSERT INTO SoldVacations (VacationId,SellerName,BuyerName,purchaseDay,Price,PayMethod, Payments)"
+                +   " VALUES(?,?,?,?,?,?,?)";
+        String deleteSQL = "DELETE FROM Trades WHERE vID1 = ? OR vID1 = ? " +
+                "OR vID2 = ? OR vID2 = ?";
+
+        try (
+                Connection conn = make_connection();
+                PreparedStatement update = conn.prepareStatement(updateSQL);
+                PreparedStatement insert1 = conn.prepareStatement(insertSQL1);
+                PreparedStatement insert2 = conn.prepareStatement(insertSQL2);
+                PreparedStatement delete = conn.prepareStatement(deleteSQL)
+                ){
+            update.setInt(1, Integer.valueOf(vTrade.get_vID1()));
+            update.setInt(2, Integer.valueOf(vTrade.get_vID2()));
+
+            insert1.setInt(1, Integer.valueOf(vTrade.get_vID1()));
+            insert1.setString(2, vTrade.get_user1()); // this user - the one accepted
+            insert1.setString(3, vTrade.get_user2()); // user made the offer
+            insert1.setString(4, LocalDate.now().toString());
+            insert1.setString(5, "0.0");
+            insert1.setString(6, "trade");
+            insert1.setInt(7, 1);
+
+            insert2.setInt(1, Integer.valueOf(vTrade.get_vID2()));
+            insert2.setString(2, vTrade.get_user2()); // user made the offer
+            insert2.setString(3, vTrade.get_user1()); // this user - the one accepted
+            insert2.setString(4, LocalDate.now().toString());
+            insert2.setString(5, "0.0");
+            insert2.setString(6, "trade");
+            insert2.setInt(7, 1);
+
+            delete.setInt(1, vTrade.getIntID1());
+            delete.setInt(2, vTrade.getIntID2());
+            delete.setInt(3, vTrade.getIntID1());
+            delete.setInt(4, vTrade.getIntID2());
+
+            update.executeUpdate();
+            insert1.executeUpdate();
+            insert2.executeUpdate();
+            delete.executeUpdate();
+
+            return "ok";
+        }
+        catch (SQLException e){
+            return "Error while preforming trade. Info: " + e.getMessage();
+        }
+    }
 
 
     public static void main(String[] args){
         Model m = new Model();
         Map<String, List<Vacation>> test = m.vacationsTradesForApprove("tt");
+        final String[] details = new String[3];
+        String user1 = "tt";
+        test.forEach(new BiConsumer<String, List<Vacation>>() {
+            @Override
+            public void accept(String s, List<Vacation> vacations) {
+                Vacation v = vacations.get(0);
+                details[0] = s;
+                details[1] = v._id;
+                details[2] = v._sellingUser;
 
-        System.out.println(test);
+            }
+        });
+        VacationTrade vt = new VacationTrade();
+        vt.set_vID1(details[0]);
+        vt.set_user1(user1);
+        vt.set_vID2(details[1]);
+        vt.set_user2(details[2]);
+
+        String response = m.approveTrade(vt);
+        System.out.println(response);
     }
 }
