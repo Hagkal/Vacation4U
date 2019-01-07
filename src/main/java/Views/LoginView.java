@@ -1,6 +1,7 @@
 package Views;
 
 import Controllers.Main;
+import Users.User;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -74,9 +75,8 @@ public class LoginView extends AView {
             return;
         }
 
-        String response = _controller.login(username, password);
-        if (response== null || response.contains("Error") &&
-                response.contains("find")){
+        User response = _controller.login(username, password);
+        if (response== null){
             popProblem("Login failed!\n" +
                     "Make sure you typed in a proper Username and Password");
             return;
@@ -89,12 +89,12 @@ public class LoginView extends AView {
             view.set_controller(_controller);
             view.set_cameFrom(Main.pStage.getScene());
 
-            view._loggedUser = username;
+            view._loggedUser = response;
             view._manager = false; /* needs to be changed */
 
             view.lbl_welcome.setText(String.format("Welcome back, %s !", tf_userName.getText()));
 
-            view.prepareView(username, false);
+            view.prepareView(response, false);
             Scene scene = new Scene(root, 900, 600);
             scene.getStylesheets().add(getClass().getResource("/ViewStyle.css").toExternalForm());
             Main.pStage.setScene(scene);

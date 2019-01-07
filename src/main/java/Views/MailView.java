@@ -1,5 +1,6 @@
 package Views;
 
+import Users.User;
 import Vacations.VacationPayment;
 import Vacations.VacationRequest;
 import Vacations.VacationSell;
@@ -27,14 +28,14 @@ public class MailView extends ARegisteredView {
     ListView<String> confirmationsList;
 
     @Override
-    public void prepareView(String username, boolean isManager) {
+    public void prepareView(User username, boolean isManager) {
         _loggedUser = username;
         _manager = isManager;
 
         waitingForAuthorizationList = new ListView<>();
         confirmationsList = new ListView<>();
 
-        ArrayList<VacationRequest> waitingForAuthorization = _controller.getVacationsForApproval(username);
+        ArrayList<VacationRequest> waitingForAuthorization = _controller.getVacationsForApproval(username.get_userName());
         String buyer, date, id, full, buyer2, price, tickets;
         if (waitingForAuthorization != null) {
             for (VacationRequest v : waitingForAuthorization) {
@@ -49,7 +50,7 @@ public class MailView extends ARegisteredView {
         waitingForAuthorizationList.setPrefHeight(150);
         bp_waiting.setCenter(waitingForAuthorizationList);
 
-        ArrayList<VacationSell> vacationsToPay = _controller.getVacationForApprovePayment(username);
+        ArrayList<VacationSell> vacationsToPay = _controller.getVacationForApprovePayment(username.get_userName());
         if (vacationsToPay != null) {
             for (VacationSell v : vacationsToPay) {
                 id = v.get_vacationId();
@@ -76,7 +77,7 @@ public class MailView extends ARegisteredView {
             end = entry.indexOf("Date");
             String buyer = entry.substring(start, end - 1);
 
-            String response = _controller.approveVacation(_loggedUser, id, buyer);
+            String response = _controller.approveVacation(_loggedUser.get_userName(), id, buyer);
             if (response.contains("approved"))
                 popInfo(response);
             else if (response.contains("error"))
@@ -152,7 +153,7 @@ public class MailView extends ARegisteredView {
             start = 7 + entry.indexOf("Price");
             end = entry.length();
             price = entry.substring(start, end);
-            seller = _loggedUser;
+            seller = _loggedUser.get_userName();
 
             String response = _controller.confirmPayment(id, seller, buyer, price);
             if (response.toLowerCase().contains("error")){

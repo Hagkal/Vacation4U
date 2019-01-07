@@ -1,5 +1,6 @@
 package Views;
 
+import Users.User;
 import Vacations.Vacation;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -22,15 +23,15 @@ public class MyVacationView extends ARegisteredView {
 
 
     @Override
-    public void prepareView(String username, boolean isManager) {
+    public void prepareView(User username, boolean isManager) {
 
-        ArrayList<Vacation> vacations = _controller.getMyVacations(username);
+        ArrayList<Vacation> vacations = _controller.getMyVacations(username.get_userName());
 
         if (vacations != null) {
             _loggedUser = username;
             String id, dest, depart, arrive, quant, price, seller, full, trade;
             for (Vacation v : vacations) {
-                if (!v._sellingUser.equals(_loggedUser)) {
+                if (!v._sellingUser.equals(_loggedUser.get_userName())) {
                     id = v._id;
                     seller = v._sellingUser;
                     dest = v._destination;

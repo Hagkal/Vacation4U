@@ -1,6 +1,7 @@
 package Views;
 
 import Controllers.Main;
+import Users.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -99,7 +100,7 @@ public class RegisteredView extends ARegisteredView{
     }
 
     @Override
-    public void prepareView(String username, boolean isManager) {
+    public void prepareView(User username, boolean isManager) {
         this._loggedUser = username;
         lbl_welcome = new Label("Welcome back " + _loggedUser + "!");
         lbl_welcome.setLayoutX(500);

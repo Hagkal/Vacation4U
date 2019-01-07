@@ -1,9 +1,11 @@
 package Views;
 
+import Users.User;
+
 public abstract class ARegisteredView extends AView {
 
-    public String _loggedUser;
+    public User _loggedUser;
     public boolean _manager;
 
-    public abstract void prepareView(String username, boolean isManager);
+    public abstract void prepareView(User username, boolean isManager);
 }
