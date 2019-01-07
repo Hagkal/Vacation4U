@@ -4,7 +4,7 @@ public class VacationTrade {
 
     private String _vID1;
     private String _user1;
-    private String _VID2;
+    private String _vID2;
     private String _user2;
 
     public VacationTrade() {
@@ -34,11 +34,19 @@ public class VacationTrade {
         this._user2 = _user2;
     }
 
-    public String get_VID2() {
-        return _VID2;
+    public String get_vID2() {
+        return _vID2;
     }
 
-    public void set_VID2(String _VID2) {
-        this._VID2 = _VID2;
+    public void set_vID2(String _vID2) {
+        this._vID2 = _vID2;
+    }
+
+    public int getIntID1(){
+        return Integer.valueOf(_vID1);
+    }
+
+    public int getIntID2(){
+        return Integer.valueOf(_vID2);
     }
 }

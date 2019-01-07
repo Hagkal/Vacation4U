@@ -21,15 +21,19 @@ public class MyVacationView extends ARegisteredView {
     @FXML
     public ListView<String> myList = new ListView<>();
 
-
     @Override
     public void prepareView(User username, boolean isManager) {
 
+        _loggedUser = username;
         ArrayList<Vacation> vacations = _controller.getMyVacations(username.get_userName());
 
         if (vacations != null) {
-            _loggedUser = username;
             String id, dest, depart, arrive, quant, price, seller, full, trade;
+            if (vacations.isEmpty()){
+                myList.getItems().add("You haven't purchased any vacation yet.. Go get em!");
+                return;
+            }
+
             for (Vacation v : vacations) {
                 if (!v._sellingUser.equals(_loggedUser.get_userName())) {
                     id = v._id;
