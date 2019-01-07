@@ -15,23 +15,16 @@ public class Vacation {
     public String _forTrade;
     public String _origin;
 
-    /** Vacations type constructor
-     * @param destination vacation destination
-     * @param price the price that the seller demand for the vacation
-     * @param user is the seller
-     */
-    public Vacation(String user, String destination, String departureDate, String returnDate, String price , String quantity, String airline ){
-        _sellingUser = user;
-        _destination = destination;
-        _departureDate = departureDate;
-        _returnDate = returnDate;
-        _price = price;
-        _quantity = quantity;
-        _airline = airline;
-
-
-
-    }
 
     public Vacation(){}
+
+    @Override
+    public String toString() {
+        return "Vacation:{" +
+                "_id='" + _id + '\'' +
+                ", _sellingUser='" + _sellingUser + '\'' +
+                ", _destination='" + _destination + '\'' +
+                ", _forTrade='" + _forTrade + '\'' +
+                '}';
+    }
 }

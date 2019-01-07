@@ -6,6 +6,9 @@ import Vacations.*;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Model {
     //Const
@@ -140,7 +143,7 @@ public class Model {
                 + "Hometown = ? "
                 + "WHERE UserName = ?";
 
-        try (Connection conn = this.make_connection();
+        try (Connection conn = this.make_connection()
         ) {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             // set the corresponding param
@@ -204,7 +207,6 @@ public class Model {
             pstmt.setString(1, username);
             pstmt.setString(2, password);
             m_results = pstmt.executeQuery();
-            String toReturn = "Error find";
 
             User user = null;
             if (m_results.next()) {
@@ -313,7 +315,7 @@ public class Model {
 
         try (
                 Connection conn = this.make_connection();
-                PreparedStatement pstmt = conn.prepareStatement(sql);
+                PreparedStatement pstmt = conn.prepareStatement(sql)
         ) {
 
             pstmt.setString(1, "payment");
@@ -392,8 +394,8 @@ public class Model {
         try (
                 Connection conn = make_connection();
                 PreparedStatement ps1 = conn.prepareStatement(sql1);
-                PreparedStatement ps2 = conn.prepareStatement(sql2);
-                ){
+                PreparedStatement ps2 = conn.prepareStatement(sql2)
+        ){
 
             ps1.setInt(1, Integer.valueOf(vacationId));
             ps2.setInt(1, Integer.valueOf(vacationId));
@@ -435,8 +437,8 @@ public class Model {
 
         try (
                 Connection conn = make_connection();
-                PreparedStatement pst = conn.prepareStatement(sql);
-                ){
+                PreparedStatement pst = conn.prepareStatement(sql)
+        ){
 
             pst.setString(1, sellerName);
             pst.setInt(2, Integer.valueOf(vacationId));
@@ -464,8 +466,8 @@ public class Model {
 
         try (
                 Connection conn = make_connection();
-                PreparedStatement pstm = conn.prepareStatement(sql);
-                ){
+                PreparedStatement pstm = conn.prepareStatement(sql)
+        ){
 
             pstm.setString(1, username);
             m_results = pstm.executeQuery();
@@ -501,7 +503,7 @@ public class Model {
 
         try (
                 Connection conn = make_connection();
-                PreparedStatement pstm = conn.prepareStatement(sql);
+                PreparedStatement pstm = conn.prepareStatement(sql)
         ){
 
             pstm.setString(1, sellerName);
@@ -547,8 +549,8 @@ public class Model {
                 Connection conn = make_connection();
                 PreparedStatement pst1 = conn.prepareStatement(sql);
                 PreparedStatement pst2 = conn.prepareStatement(sql2);
-                PreparedStatement pstSold = conn.prepareStatement(sqlInsertSold);
-                ){
+                PreparedStatement pstSold = conn.prepareStatement(sqlInsertSold)
+        ){
 
             pst1.setInt(1, Integer.valueOf(vacationId));
             pst1.setString(2, username);
@@ -593,7 +595,7 @@ public class Model {
                 Connection conn = make_connection();
                 PreparedStatement pst1 = conn.prepareStatement(sql);
                 PreparedStatement pst2 = conn.prepareStatement(sql2);
-                PreparedStatement pstSold = conn.prepareStatement(sqlInsertSold);
+                PreparedStatement pstSold = conn.prepareStatement(sqlInsertSold)
         ){
 
             pst1.setInt(1, Integer.valueOf(vacationId));
@@ -634,8 +636,8 @@ public class Model {
 
         try (
                 Connection conn = make_connection();
-                PreparedStatement pst = conn.prepareStatement(sql);
-                ){
+                PreparedStatement pst = conn.prepareStatement(sql)
+        ){
 
             pst.setString(1, username);
 
@@ -678,7 +680,7 @@ public class Model {
 
         try (
                 Connection conn = make_connection();
-                PreparedStatement pstm = conn.prepareStatement(sql);
+                PreparedStatement pstm = conn.prepareStatement(sql)
         ){
 
             pstm.setString(1, username);
@@ -745,9 +747,15 @@ public class Model {
      * @return - string if succeeded or not
      */
     public String bidTrade(VacationTrade vTrade) {
-        if (alreadyMadeTradeBid(vTrade)){
-            return "You already made a bid for that vacation with the selected vacation!";
+        try {
+            if (alreadyMadeTradeBid(vTrade)){
+                return "You already made a bid for that vacation with the selected vacation!";
+            }
         }
+        catch (SQLException e){
+            return "Error while connecting to DB: " + e.getMessage();
+        }
+
 
         String sql = "INSERT INTO Trades (vID1,user1,vID2,user2)"
                 +   " VALUES(?,?,?,?)";
@@ -768,7 +776,12 @@ public class Model {
         }
     }
 
-    private boolean alreadyMadeTradeBid(VacationTrade vTrade){
+    /**
+     * method to decide weather a given trade offer was already made
+     * @param vTrade - the trade to examine
+     * @return - true if exist, false otherwise
+     */
+    private boolean alreadyMadeTradeBid(VacationTrade vTrade) throws SQLException{
         String sql = "SELECT * FROM Trades WHERE vID1 = ? AND vID2 = ?";
 
         try (Connection conn = this.make_connection();
@@ -781,9 +794,108 @@ public class Model {
 
             return m_results.next();
         }
-        catch (SQLException e) {
-            return false;
+
+    }
+
+    public Map<String, List<Vacation>> vacationsTradesForApprove(String username){
+        TreeMap<String, List<Vacation>> toReturn = new TreeMap<>();
+        ArrayList<VacationTrade> trades = null;
+
+        try {
+            trades = getTradeOffersForUser(username);
+        }
+        catch (SQLException e){
+            return null;
         }
 
+        /* by here trades will never be null */
+        for (VacationTrade vTrade :
+                trades){
+            List<Vacation> list = toReturn.computeIfAbsent(vTrade.get_vID1(), k -> new ArrayList<>());
+            Vacation offer = getVacation(vTrade.get_VID2());
+            if (offer != null){
+                list.add(offer);
+            }
+        }
+
+        return toReturn;
+    }
+
+    /**
+     * method to get a vacation by it's id
+     * @param vid2 - the requested vacation
+     * @return - vacation object represents the record
+     */
+    private Vacation getVacation(String vid2) {
+        String sql = "SELECT * FROM Vacations WHERE VacationId = " + vid2;
+
+        try (
+                Connection con = make_connection();
+                PreparedStatement pstm = con.prepareStatement(sql)
+                ){
+
+            m_results = pstm.executeQuery();
+
+            Vacation v = null;
+            if (m_results.next()){ // should always get in here
+                v = new Vacation();
+                v._id = m_results.getString(1);
+                v._sellingUser = m_results.getString(2);
+                v._destination = m_results.getString(3);
+                v._returnDate = m_results.getString(4);
+                v._departureDate = m_results.getString(5);
+                v._airline = m_results.getString(6);
+                v._quantity = m_results.getString(7);
+                v._price = m_results.getString(8);
+                v._forTrade = m_results.getString(9);
+                v._origin = m_results.getString(11);
+            }
+
+            return v;
+        }
+        catch (SQLException e){
+            return null;
+        }
+    }
+
+    /**
+     * method to get offer trades of a given user
+     * @param username - the user
+     * @return - list of vacation trades
+     * @throws SQLException - if an error occurred
+     */
+    private ArrayList<VacationTrade> getTradeOffersForUser(String username) throws SQLException{
+        String vacationsSQL = "SELECT * FROM Trades WHERE user1 = ?";
+
+        try(
+                Connection conn = make_connection();
+                PreparedStatement pstm = conn.prepareStatement(vacationsSQL)
+        ){
+            pstm.setString(1, username);
+
+            m_results = pstm.executeQuery();
+
+            ArrayList<VacationTrade> vacationTrades = new ArrayList<>();
+            while (m_results.next()){
+                VacationTrade v = new VacationTrade();
+                v.set_vID1(m_results.getString(2));
+                v.set_user1(m_results.getString(3));
+                v.set_VID2(m_results.getString(4));
+                v.set_user2(m_results.getString(5));
+
+                vacationTrades.add(v);
+            }
+
+            return vacationTrades;
+        }
+    }
+
+
+
+    public static void main(String[] args){
+        Model m = new Model();
+        Map<String, List<Vacation>> test = m.vacationsTradesForApprove("tt");
+
+        System.out.println(test);
     }
 }
