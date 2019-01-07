@@ -1,6 +1,7 @@
 package Views;
 
 import Controllers.Main;
+import Users.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -47,12 +48,12 @@ public class DeleteView extends ARegisteredView {
     }
 
     @Override
-    public void prepareView(String username, boolean isManager) {
+    public void prepareView(User username, boolean isManager) {
         this._loggedUser = username;
         this._manager = isManager;
 
         if (!isManager){
-            tf_userNameDelete.setText(username);
+            tf_userNameDelete.setText(username.get_userName());
             tf_userNameDelete.setDisable(true);
         }
     }

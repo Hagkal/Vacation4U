@@ -1,5 +1,6 @@
 package Views;
 
+import Users.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -215,12 +216,12 @@ public class UpdateView extends ARegisteredView {
     }
 
     @Override
-    public void prepareView(String username, boolean isManager) {
+    public void prepareView(User username, boolean isManager) {
         this._loggedUser = username;
         this._manager = isManager;
 
         if (!isManager){
-            tf_userNameRead.setText(username);
+            tf_userNameRead.setText(username.get_userName());
             tf_userNameRead.setDisable(true);
         }
     }

@@ -1,9 +1,7 @@
 package Models;
 
-import Vacations.Vacation;
-import Vacations.VacationPayment;
-import Vacations.VacationRequest;
-import Vacations.VacationSell;
+import Users.User;
+import Vacations.*;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -197,7 +195,7 @@ public class Model {
      * @param password - given password
      * @return - string of success or fail
      */
-    public String login(String username, String password) {
+    public User login(String username, String password) {
         String sql = "SELECT * FROM Users WHERE UserName = ? AND Password = ?";
 
         try (Connection conn = this.make_connection();
@@ -208,11 +206,18 @@ public class Model {
             m_results = pstmt.executeQuery();
             String toReturn = "Error find";
 
+            User user = null;
             if (m_results.next()) {
-                toReturn = "OK";
+                user = new User();
+                user.set_userName(m_results.getString(1));
+                user.set_password(m_results.getString(2));
+                user.set_birthday(m_results.getString(3));
+                user.set_firstName(m_results.getString(4));
+                user.set_lastName(m_results.getString(5));
+                user.set_homeTown(m_results.getString(6));
             }
 
-            return toReturn;
+            return user;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;
@@ -228,8 +233,9 @@ public class Model {
      */
     public String publishVacation(Vacation toPublish) {
 
-        String sql = "INSERT INTO Vacations (SellerName,Destination,ArrivalDate,DepartureDate,Airline,TicketAmount,Price,Tradable,Status)"
-                + " VALUES(?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Vacations " +
+                "(SellerName,Destination,ArrivalDate,DepartureDate,Airline,TicketAmount,Price,Tradable,Status,Origin)"
+                + " VALUES(?,?,?,?,?,?,?,?,?,?)";
 
         try (Connection conn = this.make_connection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -242,6 +248,7 @@ public class Model {
             pstmt.setString(7, toPublish._price);
             pstmt.setString(8, toPublish._forTrade);
             pstmt.setString(9, "Published");
+            pstmt.setString(10, toPublish._origin);
             pstmt.executeUpdate();
 
             return "Created :)";
@@ -340,17 +347,19 @@ public class Model {
             ArrayList<Vacation> vacations = new ArrayList<>();
 
             while (m_results.next()) {
-                String vacationId = m_results.getString(1);
-                String seller = m_results.getString(2);
-                String destination = m_results.getString(3);
-                String returnDate = m_results.getString(4);
-                String departureDate = m_results.getString(5);
-                String airline = m_results.getString(6);
-                String ticketAmount = m_results.getString(7);
-                String price = m_results.getString(8);
+                Vacation v = new Vacation();
 
-                Vacation v = new Vacation(seller, destination, departureDate, returnDate, price, ticketAmount, airline);
-                v._id = vacationId;
+                v._id = m_results.getString(1);
+                v._sellingUser = m_results.getString(2);
+                v._destination = m_results.getString(3);
+                v._returnDate = m_results.getString(4);
+                v._departureDate = m_results.getString(5);
+                v._airline = m_results.getString(6);
+                v._quantity = m_results.getString(7);
+                v._price = m_results.getString(8);
+                v._forTrade = m_results.getString(9);
+                v._origin = m_results.getString(11);
+
                 vacations.add(v);
             }
 
@@ -530,7 +539,7 @@ public class Model {
      */
     public String payForVacation(String vacationId, String username, String seller, String price, String payMethod, int payments){
         String sql = "DELETE FROM pendingVacations WHERE VacationId = ? AND potentialBuyerName = ?";
-        String sql2 = "UPDATE Vacations SET Status = 'sold'";
+        String sql2 = "UPDATE Vacations SET Status = 'sold'"; /* why there is no where clause here ?? */
         String sqlInsertSold = "INSERT INTO SoldVacations (VacationId,SellerName,BuyerName,purchaseDay,Price,PayMethod, Payments)"
                 +   " VALUES(?,?,?,?,?,?,?)";
 
@@ -576,7 +585,7 @@ public class Model {
      */
     public String confirmPayment(String vacationId, String seller, String buyer, String price){
         String sql = "DELETE FROM pendingVacations WHERE VacationId = ? AND potentialBuyerName = ?";
-        String sql2 = "UPDATE Vacations SET Status = 'sold'";
+        String sql2 = "UPDATE Vacations SET Status = 'sold' WHERE VacationId = ?"; /* why there is no where clause here ?? */
         String sqlInsertSold = "INSERT INTO SoldVacations (VacationId,SellerName,BuyerName,purchaseDay,Price,PayMethod, Payments)"
                 +   " VALUES(?,?,?,?,?,?,?)";
 
@@ -589,6 +598,8 @@ public class Model {
 
             pst1.setInt(1, Integer.valueOf(vacationId));
             pst1.setString(2, buyer);
+
+            pst2.setInt(1, Integer.valueOf(vacationId));
 
             pstSold.setInt(1, Integer.valueOf(vacationId));
             pstSold.setString(2, seller);
@@ -632,33 +643,147 @@ public class Model {
 
             ArrayList<Vacation> toReturn = new ArrayList<>();
             while (m_results.next()){
-                String _id = String.valueOf(m_results.getInt(1));
-                String _departureDate = m_results.getString(5);
-                String _returnDate = m_results.getString(4);
-                String _price = m_results.getString(8);
-                String _sellingUser = m_results.getString(2);
-                String _destination = m_results.getString(3);
-                String _airline = m_results.getString(6);
-                String _quantity = m_results.getString(7);
+                Vacation v = new Vacation();
 
-                Vacation v = new Vacation(_sellingUser, _destination, _departureDate, _returnDate, _price, _quantity, _airline);
-                v._id = _id;
+                v._id = m_results.getString(1);
+                v._sellingUser = m_results.getString(2);
+                v._destination = m_results.getString(3);
+                v._returnDate = m_results.getString(4);
+                v._departureDate = m_results.getString(5);
+                v._airline = m_results.getString(6);
+                v._quantity = m_results.getString(7);
+                v._price = m_results.getString(8);
+                v._forTrade = m_results.getString(9);
+                v._origin = m_results.getString(11);
+
                 toReturn.add(v);
             }
 
             return toReturn;
         }
         catch (SQLException e){
-            System.out.println(e.getMessage());
+            //System.out.println(e.getMessage());
             return null;
         }
     }
 
-    public ArrayList<Vacation> getMyTradeVacations(String username) {
-        return null;
+    /**
+     * method to retrieve all published and unsold vacations of a user
+     * @param username - the user
+     * @return - list of vacations
+     */
+    private ArrayList<Vacation> getMyPublishedNotSoldVacations(String username) {
+        String sql = "SELECT * FROM Vacations WHERE SellerName = ? AND " +
+                "status NOT IN ('sold')";
+
+        try (
+                Connection conn = make_connection();
+                PreparedStatement pstm = conn.prepareStatement(sql);
+        ){
+
+            pstm.setString(1, username);
+            m_results = pstm.executeQuery();
+
+            ArrayList<Vacation> forPayment = new ArrayList<>();
+            while (m_results.next()){
+                Vacation v = new Vacation();
+
+                v._id = m_results.getString(1);
+                v._sellingUser = m_results.getString(2);
+                v._destination = m_results.getString(3);
+                v._returnDate = m_results.getString(4);
+                v._departureDate = m_results.getString(5);
+                v._airline = m_results.getString(6);
+                v._quantity = m_results.getString(7);
+                v._price = m_results.getString(8);
+                v._forTrade = m_results.getString(9);
+                v._origin = m_results.getString(11);
+
+                forPayment.add(v);
+            }
+
+            return forPayment;
+        }
+        catch (SQLException e){
+            return null;
+        }
     }
 
-    public String bidTrade(String sellerName, String bidderUsername, String vacationId, String price) {
-        return null;
+    /**
+     * method to get vacation eligible for trade by a user
+     * @param username - the user
+     * @return - list of tradable vacations
+     */
+    public ArrayList<Vacation> getMyVacationForTrade(String username){
+        ArrayList<Vacation> myVacations = getMyVacations(username);
+        ArrayList<Vacation> publishVacations = getMyPublishedNotSoldVacations(username);
+        ArrayList<Vacation> toReturn = new ArrayList<>();
+
+        if (myVacations==null && publishVacations==null){
+            return null;
+        }
+        if (myVacations != null){
+            for (Vacation v :
+                    myVacations){
+                LocalDate departure = LocalDate.parse(v._departureDate);
+                if (departure.isAfter(LocalDate.now())){
+                    toReturn.add(v);
+                }
+            }
+        }
+        if (publishVacations!=null){
+            toReturn.addAll(publishVacations);
+        }
+
+        return toReturn;
+
+    }
+
+    /**
+     * method to make trade bids
+     * @param vTrade - the trade vacation
+     * @return - string if succeeded or not
+     */
+    public String bidTrade(VacationTrade vTrade) {
+        if (alreadyMadeTradeBid(vTrade)){
+            return "You already made a bid for that vacation with the selected vacation!";
+        }
+
+        String sql = "INSERT INTO Trades (vID1,user1,vID2,user2)"
+                +   " VALUES(?,?,?,?)";
+
+        try (Connection conn = this.make_connection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, Integer.valueOf(vTrade.get_vID1()));
+            pstmt.setString(2, vTrade.get_user1());
+            pstmt.setInt(3, Integer.valueOf(vTrade.get_VID2()));
+            pstmt.setString(4, vTrade.get_user2());
+
+            pstmt.executeUpdate();
+
+            return "ok";
+        } catch (SQLException e) {
+            return "Something bad happened during trade writing\n" + e.getMessage();
+        }
+    }
+
+    private boolean alreadyMadeTradeBid(VacationTrade vTrade){
+        String sql = "SELECT * FROM Trades WHERE vID1 = ? AND vID2 = ?";
+
+        try (Connection conn = this.make_connection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, Integer.valueOf(vTrade.get_vID1()));
+            pstmt.setInt(2, Integer.valueOf(vTrade.get_VID2()));
+
+            m_results = pstmt.executeQuery();
+
+            return m_results.next();
+        }
+        catch (SQLException e) {
+            return false;
+        }
+
     }
 }

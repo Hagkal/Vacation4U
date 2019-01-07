@@ -1,7 +1,9 @@
 package Views;
 
+import Users.User;
 import Vacations.Vacation;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -20,13 +22,14 @@ public class PublishVactionView extends ARegisteredView {
     public TextField tf_price;
     public DatePicker dp_return;
     public DatePicker dp_departure;
+    public TextField tf_origin;
+    public CheckBox cb_trade;
 
     @Override
-    public void prepareView(String username, boolean isManager) {
+    public void prepareView(User username, boolean isManager) {
         _loggedUser = username;
         _manager = isManager;
     }
-
 
     public void publishVacation(MouseEvent mouseEvent) {
         mouseEvent.consume();
@@ -36,11 +39,16 @@ public class PublishVactionView extends ARegisteredView {
         String destination = tf_destination.getText(),
                 airline = tf_airline.getText(),
                 quantity = tf_quantity.getText(),
-                price = tf_price.getText();
+                price = tf_price.getText(),
+                origin = tf_origin.getText();
+        String forTrade = String.valueOf(cb_trade.isSelected());
 
 
         if (destination.isEmpty()){
             errors.add("Destination must be filled");
+        }
+        if (origin.isEmpty()){
+            errors.add("Origin must be filled");
         }
         if (airline.isEmpty()){
             errors.add("Airline must be filled");
@@ -92,10 +100,19 @@ public class PublishVactionView extends ARegisteredView {
             popProblem("Please fix the following errors before we may continue:\n" + builder.toString());
         }
         else {
-            Vacation toPublish = new Vacation(_loggedUser, destination, dp_departure.getValue().toString(),
-                    dp_return.getValue().toString(), price, quantity, airline);
 
-            String response = _controller.publishVacation(toPublish);
+            Vacation v = new Vacation();
+            v._sellingUser = _loggedUser.get_userName();
+            v._destination = destination;
+            v._departureDate = dp_departure.getValue().toString();
+            v._returnDate = dp_return.getValue().toString();
+            v._price = price;
+            v._quantity = quantity;
+            v._airline = airline;
+            v._origin = origin;
+            v._forTrade = forTrade;
+
+            String response = _controller.publishVacation(v);
 
             if (response.contains("error")){
                 popProblem(response);

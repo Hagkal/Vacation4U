@@ -13,6 +13,7 @@ public class Vacation {
     public String _airline;
     public String _quantity;
     public String _forTrade;
+    public String _origin;
 
     /** Vacations type constructor
      * @param destination vacation destination
@@ -31,4 +32,6 @@ public class Vacation {
 
 
     }
+
+    public Vacation(){}
 }

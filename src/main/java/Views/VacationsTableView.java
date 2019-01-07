@@ -1,19 +1,14 @@
 package Views;
 
+import Users.User;
 import Vacations.Vacation;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import Vacations.VacationTrade;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -23,14 +18,13 @@ public class VacationsTableView extends ARegisteredView{
 
     @FXML
     public ListView<String> sellList = new ListView<>();
-    public ListView<String> tradeList = new ListView<>();
 
 
     @Override
-    public void prepareView(String username, boolean isManager) {
+    public void prepareView(User username, boolean isManager) {
         ArrayList <Vacation> vacations = _controller.getAllVacations(null);
         if (username != null)
-            vacations = _controller.getAllVacations(username);
+            vacations = _controller.getAllVacations(username.get_userName());
 
         if (vacations != null) {
             _loggedUser = username;
@@ -53,6 +47,7 @@ public class VacationsTableView extends ARegisteredView{
     }
 
     public void setSelectVacation (MouseEvent event){
+        event.consume();
         if (_loggedUser != null) {
             String entry = sellList.getSelectionModel().getSelectedItem();
             if (entry != null) {
@@ -66,11 +61,11 @@ public class VacationsTableView extends ARegisteredView{
                 selectedVacationDetails[1] = entry.substring(start + 2, end - 1);//seller
                 entry = entry.substring(end);
                 start = entry.indexOf("Price");
-                end = entry.length();
-                selectedVacationDetails[2] = entry.substring(start + 7, end);//price
-                selectedVacationDetails[3] = _loggedUser; //logged user
+                end = entry.indexOf("For");
+                selectedVacationDetails[2] = entry.substring(start + 7, end).trim();//price
+                selectedVacationDetails[3] = _loggedUser.get_userName(); //logged user
 
-                if (selectedVacationDetails[1].equals(_loggedUser)) {
+                if (selectedVacationDetails[1].equals(_loggedUser.get_userName())) {
                     popProblem("Can't bid on your own vacation!! :P");
                     return;
                 }
@@ -91,32 +86,38 @@ public class VacationsTableView extends ARegisteredView{
     }
 
     public void setSelectTradeVacation (MouseEvent event){
+        event.consume();
         if (_loggedUser != null) {
             String entry = sellList.getSelectionModel().getSelectedItem();
             if (entry != null) {
+                VacationTrade vTrade = new VacationTrade();
                 int start = entry.indexOf(':');
                 int end = entry.indexOf("Seller");
                 String[] selectedVacationDetails = new String[5];
-                selectedVacationDetails[0] = entry.substring(start + 2, end - 1);//id
+
+                /* vTrade needs */
+                vTrade.set_vID1(entry.substring(start + 2, end - 1));//id
                 entry = entry.substring(end);
                 start = entry.indexOf(':');
                 end = entry.indexOf("Destination");
-                selectedVacationDetails[1] = entry.substring(start + 2, end - 1);//seller
+                vTrade.set_user1(entry.substring(start + 2, end - 1));//seller
+                /* end of vTrade needs */
+
                 entry = entry.substring(end);
                 start = entry.indexOf("Price");
                 end = entry.length();
                 selectedVacationDetails[2] = entry.substring(start + 7, end);//price
-                selectedVacationDetails[3] = _loggedUser; //logged user
+                selectedVacationDetails[3] = _loggedUser.get_userName(); //logged user
                 start = entry.indexOf("For Trade");
                 end = entry.length();
                 selectedVacationDetails[4] = entry.substring(start + 11, end);
 
-                if (selectedVacationDetails[4].equals("no")) {
+                if (selectedVacationDetails[4].equals("false")) {
                     popProblem("Vacation is not available for trade!");
                     return;
                 }
 
-                if (selectedVacationDetails[1].equals(_loggedUser)) {
+                if (vTrade.get_user1().equals(_loggedUser.get_userName())) {
                     popProblem("Can't offer trade on your own vacation!");
                     return;
                 }
@@ -130,22 +131,11 @@ public class VacationsTableView extends ARegisteredView{
                     Scene scene = new Scene(root, 600, 300);
                     scene.getStylesheets().add(getClass().getResource("/ViewStyle.css").toExternalForm());
 
-                    ArrayList <Vacation> vacations = _controller.getAllVacations(_loggedUser);
-                    if (vacations != null) {
-                        String id, dest, depart, arrive, quant, price, seller, full;
-                        for (Vacation v : vacations) {
-                            id = v._id;
-                            seller = v._sellingUser;
-                            dest = v._destination;
-                            depart = v._departureDate;
-                            arrive = v._returnDate;
-                            quant = v._quantity;
-                            price = v._price;
-                            full = "Vacation ID: " + id + "\t" + "Seller: " + seller + "\t" + "Destination: " + dest + "\t" + " Departure Date: " + depart + "\t" +
-                                    " Arrival Date: " + arrive + "\t" + " Quantity: " + quant + "\t" + " Price: " + price;
-                            tradeList.getItems().add(full);
-                        }
-                    }
+                    MyVacationsForTradeView control = fxml.getController();
+                    control._controller = _controller;
+                    control._cameFrom = _cameFrom;
+                    control.prepareView(_loggedUser, _manager);
+                    control._bidFor = vTrade;
                     
                     myVacationsStage.setScene(scene);
                     myVacationsStage.show();
