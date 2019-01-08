@@ -1,9 +1,7 @@
 package Views;
 
 import Users.User;
-import Vacations.VacationPayment;
-import Vacations.VacationRequest;
-import Vacations.VacationSell;
+import Vacations.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,24 +14,27 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class MailView extends ARegisteredView {
 
     public AnchorPane ap_mail;
-    public BorderPane bp_waiting;
-    public BorderPane bp_authorized;
-    public Button btn_authorize = new Button();
-    public Button btn_pay = new Button();
-    ListView<String> waitingForAuthorizationList;
-    ListView<String> confirmationsList;
+    public Button btn_authorize;
+    public ListView<String> waitingForSellAuthorizationList;
+    public ListView<String> confirmationsSellList;
+    public ListView<String> confirmationsTradeList;
+    public Button btn_approvePayment;
+    public Button btn_approveTrade;
 
     @Override
     public void prepareView(User username, boolean isManager) {
         _loggedUser = username;
         _manager = isManager;
 
-        waitingForAuthorizationList = new ListView<>();
-        confirmationsList = new ListView<>();
+        waitingForSellAuthorizationList.getItems().clear();
+        confirmationsSellList.getItems().clear();
+        confirmationsTradeList.getItems().clear();
 
         ArrayList<VacationRequest> waitingForAuthorization = _controller.getVacationsForApproval(username.get_userName());
         String buyer, date, id, full, buyer2, price, tickets;
@@ -43,12 +44,9 @@ public class MailView extends ARegisteredView {
                 buyer = v._buyer;
                 date = v._date;
                 full = "VacationID: " + id + "\t" + "Buyer: " + buyer + "\t" + "Date: " + date;
-                waitingForAuthorizationList.getItems().add(full);
+                waitingForSellAuthorizationList.getItems().add(full);
             }
         }
-        waitingForAuthorizationList.setPrefWidth(800);
-        waitingForAuthorizationList.setPrefHeight(150);
-        bp_waiting.setCenter(waitingForAuthorizationList);
 
         ArrayList<VacationSell> vacationsToPay = _controller.getVacationForApprovePayment(username.get_userName());
         if (vacationsToPay != null) {
@@ -58,16 +56,32 @@ public class MailView extends ARegisteredView {
                 date = v.get_date();
                 price = v.get_price();
                 full = "VacationID: " + id + "\t" + "Buyer: " + buyer2 + "\t" + "Date: " + date + "\t" + "Price: " + price;
-                confirmationsList.getItems().add(full);
+                confirmationsSellList.getItems().add(full);
             }
         }
-        confirmationsList.setPrefHeight(150);
-        confirmationsList.setPrefWidth(800);
-        bp_authorized.setCenter(confirmationsList);
+
+        Map<String, List<Vacation>>  vacationsToTrade = _controller.vacationsTradesForApprove(username.get_userName());
+        if (vacationsToTrade != null) {
+            String vacationID = "";
+            for (String vID :
+                    vacationsToTrade.keySet()) {
+
+                List<Vacation> vacationsPropose = vacationsToTrade.get(vID);
+                for (Vacation v : vacationsPropose) {
+                    id = v._id;
+
+                    full = "Your Vacation: " + vID + "    Trade Offer:  " + "VacationID: " + id + "    " + "Seller:  " + v._sellingUser
+                            + "    Destination: " + v._destination +   "    Origin: " + v._origin +  "    Departure: " + v._departureDate
+                            + "    Return: " + v._returnDate + "    Airline: " + v._airline + "    Tickets: " + v._quantity;
+                    confirmationsTradeList.getItems().add(full);
+                }
+            }
+        }
     }
 
     public void setSelectApprove (MouseEvent event){
-        String entry = waitingForAuthorizationList.getSelectionModel().getSelectedItem();
+        event.consume();
+        String entry = waitingForSellAuthorizationList.getSelectionModel().getSelectedItem();
         if (entry != null) {
             int start = entry.indexOf(':');
             int end = entry.indexOf("Buyer");
@@ -89,8 +103,9 @@ public class MailView extends ARegisteredView {
         prepareView(_loggedUser, _manager);
     }
 
+    //not in use in this part!
     public void setSelectPay (MouseEvent event){
-        String entry = confirmationsList.getSelectionModel().getSelectedItem();
+        String entry = confirmationsSellList.getSelectionModel().getSelectedItem();
         if (entry != null) {
             String id, username, seller, price;
             int start = 12;
@@ -139,7 +154,7 @@ public class MailView extends ARegisteredView {
 
     public void confirmPayment(MouseEvent mouseEvent){
         mouseEvent.consume();
-        String entry = confirmationsList.getSelectionModel().getSelectedItem();
+        String entry = confirmationsSellList.getSelectionModel().getSelectedItem();
         if (entry != null) {
             String id, buyer, seller, price;
             int start = 12;
@@ -170,4 +185,32 @@ public class MailView extends ARegisteredView {
         prepareView(_loggedUser, _manager);
     }
 
+    public void approveTrade(MouseEvent mouseEvent) {
+        mouseEvent.consume();
+
+        String entry = confirmationsTradeList.getSelectionModel().getSelectedItem();
+        VacationTrade vTrade = new VacationTrade();
+        int start = entry.indexOf(":");
+        int end = entry.indexOf("Trade");
+        vTrade.set_vID1(entry.substring(start+1, end).trim());
+        vTrade.set_user1(_loggedUser.get_userName());
+
+        start = entry.indexOf("ID:");
+        end = entry.indexOf("Seller");
+        vTrade.set_vID2(entry.substring(start+3, end).trim());
+
+        start = end;
+        end = entry.indexOf("Destination");
+        vTrade.set_user2(entry.substring(start+7, end).trim());
+
+        String response = _controller.approveTrade(vTrade);
+        if (response.equals("ok")){
+            popInfo("Trade has been made!");
+        }
+        else{
+            popProblem(response);
+        }
+
+        prepareView(_loggedUser, _manager);
+    }
 }

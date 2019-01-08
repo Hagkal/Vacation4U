@@ -2,10 +2,10 @@ package Vacations;
 
 public class VacationTrade {
 
-    private String _vID1;
+    private String _vID1;//the one that approve
     private String _user1;
     private String _vID2;
-    private String _user2;
+    private String _user2;//the proposer
 
     public VacationTrade() {
     }
