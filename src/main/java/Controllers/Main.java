@@ -78,7 +78,7 @@ public class Main extends Application {
         view.set_controller(controller);
 
         // displaying the first presentation
-        primaryStage.setTitle("Vacation4U");
+        primaryStage.setTitle("EveryVacation4U");
         Scene scene = new Scene(root, 900, 600);
         scene.getStylesheets().add(getClass().getResource("/ViewStyle.css").toExternalForm());
         primaryStage.setScene(scene);

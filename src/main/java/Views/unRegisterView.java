@@ -59,7 +59,7 @@ public class unRegisterView extends AView {
         try {
             Stage pStage = new Stage();
             FXMLLoader fxml = new FXMLLoader(getClass().getResource("/fxmls/tableXML.fxml"));
-            pStage.setTitle("Vacation4U");
+            pStage.setTitle("EveryVacation4U");
             Parent root = fxml.load();
 
             VacationsTableView v = fxml.getController();
