@@ -19,7 +19,7 @@ public class MyVacationView extends ARegisteredView {
 
 
     @FXML
-    public ListView<String> myList = new ListView<>();
+    public ListView<String> myList;
 
     @Override
     public void prepareView(User username, boolean isManager) {
@@ -35,19 +35,18 @@ public class MyVacationView extends ARegisteredView {
             }
 
             for (Vacation v : vacations) {
-                if (!v._sellingUser.equals(_loggedUser.get_userName())) {
-                    id = v._id;
-                    seller = v._sellingUser;
-                    dest = v._destination;
-                    depart = v._departureDate;
-                    arrive = v._returnDate;
-                    quant = v._quantity;
-                    price = v._price;
-                    trade = v._forTrade;
-                    full = "Vacation ID: " + id + "\t" + "Seller: " + seller + "\t" + "Destination: " + dest + "\t" + " Departure Date: " + depart + "\t" +
-                            " Arrival Date: " + arrive + "\t" + " Quantity: " + quant + "\t" + " Price: " + price + "\t" + " For Trade: " + trade;
-                    myList.getItems().add(full);
-                }
+                id = v._id;
+                seller = v._sellingUser;
+                dest = v._destination;
+                depart = v._departureDate;
+                arrive = v._returnDate;
+                quant = v._quantity;
+                price = v._price;
+                trade = v._forTrade;
+                full = "Vacation ID: " + id + "\t" + "Seller: " + seller + "\t" + "Destination: " + dest
+                        + "    Origin: " + v._origin + "\t" + " Departure Date: " + depart + "\t" +
+                        " Arrival Date: " + arrive + "\t" + " Quantity: " + quant + "\t" + " Price: " + price + "\t" + " For Trade: " + trade;
+                myList.getItems().add(full);
             }
         }
     }

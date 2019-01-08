@@ -28,7 +28,7 @@ public class VacationsTableView extends ARegisteredView{
 
         if (vacations != null) {
             _loggedUser = username;
-            String id, dest, depart, arrive, quant, price, seller, trade, full;
+            String id, dest, depart, arrive, quant, price, seller, trade, origin, full;
             for (Vacation v : vacations) {
                     id = v._id;
                     seller = v._sellingUser;
@@ -38,8 +38,11 @@ public class VacationsTableView extends ARegisteredView{
                     quant = v._quantity;
                     price = v._price;
                     trade = v._forTrade;
-                    full = "Vacation ID: " + id + "\t" + "Seller: " + seller + "\t" + "Destination: " + dest + "\t" + " Departure Date: " + depart + "\t" +
-                            " Arrival Date: " + arrive + "\t" + " Quantity: " + quant + "\t" + " Price: " + price + "\t" + " For Trade: " + trade;
+                    origin = v._origin;
+                    full = "Vacation ID: " + id + "\t" + "Seller: " + seller + "\t" + "Destination: " + dest
+                            + "\tOrigin: " + origin + "\t" + " Departure Date: " + depart + "\t" +
+                            " Arrival Date: " + arrive + "\t" + " Quantity: " + quant + "\t"
+                            + " Price: " + price + "\t" + " For Trade: " + trade;
                 sellList.getItems().add(full);
             }
         }
